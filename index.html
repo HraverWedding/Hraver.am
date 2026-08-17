@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Karine & Arsen - Wedding Invitation</title>
-    <!-- Google Fonts -->
+    
+    <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Noto+Sans+Armenian:wght@300;400;600&display=swap" rel="stylesheet">
     
     <style>
         :root {
             --gold: #d4af37;
-            --dark-bg: #1a1f2c; /* Թխագույն/ուգ կապույտ */
-            --light-bg: #f9f6f0; /* Բաց բեժ */
+            --dark-bg: #1a1f2c;
+            --envelope-color: #252b3d;
+            --envelope-flap: #2d3548;
+            --light-bg: #f9f6f0;
             --text-dark: #2c3e50;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'Noto Sans Armenian', sans-serif;
             background-color: var(--dark-bg);
@@ -28,429 +27,190 @@
             color: white;
         }
 
-        /* --- ENVELOPE SECTION (Opening Animation) --- */
+        /* --- ENVELOPE ANIMATION SECTION --- */
         .envelope-wrapper {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100vh;
+            top: 0; left: 0; width: 100%; height: 100vh;
             background-color: var(--dark-bg);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000;
-            transition: transform 1s ease-in-out, opacity 1s;
+            transition: opacity 1s ease 1.5s;
         }
 
         .envelope-container {
             position: relative;
-            width: 300px;
-            height: 200px;
+            width: 320px; height: 220px;
             cursor: pointer;
             perspective: 1000px;
         }
 
-        /* Envelope Body */
         .envelope-body {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            background: #252b3d;
+            position: absolute; bottom: 0; width: 100%; height: 100%;
+            background: var(--envelope-color);
             border-radius: 0 0 10px 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
             z-index: 10;
         }
 
-        /* Top Flap */
         .flap-top {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #2d3548;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--envelope-flap);
             clip-path: polygon(0 0, 50% 100%, 100% 0);
             transform-origin: top;
-            transition: transform 0.8s ease 0.2s, z-index 0.2s linear 0.6s;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.5s;
             z-index: 20;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Bottom Flap */
         .flap-bottom {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #252b3d;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
+            background: var(--envelope-color);
             clip-path: polygon(0 100%, 50% 0, 100% 100%);
             z-index: 15;
+            transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-origin: bottom;
         }
 
-        /* Side Flaps (Visual only) */
         .flap-left {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: #293042;
             clip-path: polygon(0 0, 50% 50%, 0 100%);
             z-index: 12;
         }
         .flap-right {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 100%;
+            position: absolute; top: 0; right: 0; width: 100%; height: 100%;
             background: #293042;
             clip-path: polygon(100% 0, 50% 50%, 100% 100%);
             z-index: 12;
         }
 
-        /* Wax Seal */
         .wax-seal {
-            width: 60px;
-            height: 60px;
-            background: #f0f0f0;
+            width: 65px; height: 65px;
+            background: #f4f4f4;
             border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
             font-family: 'Great Vibes', cursive;
-            font-size: 24px;
-            color: #aaa;
-            position: relative;
-            z-index: 30;
-            margin-top: 20px; /* Position on the flap */
+            font-size: 26px; color: #aaa;
+            position: relative; z-index: 30;
+            margin-top: 30px;
+            transition: transform 0.3s;
         }
+        
+        .envelope-container:hover .wax-seal { transform: scale(1.1); }
 
         .open-text {
-            margin-top: 10px;
-            font-size: 14px;
-            color: #ccc;
-            text-align: center;
-            line-height: 1.2;
+            margin-top: 15px; font-size: 14px; color: #ccc;
+            text-align: center; line-height: 1.3; font-family: 'Cormorant Garamond', serif;
         }
-
-        .arrow {
-            font-size: 20px;
-            margin-bottom: 5px;
-            animation: bounce 2s infinite;
-        }
+        .arrow { font-size: 20px; margin-bottom: 5px; animation: bounce 2s infinite; }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-10px);}
-            60% {transform: translateY(-5px);}
+            40% {transform: translateY(-8px);}
+            60% {transform: translateY(-4px);}
         }
 
-        /* Animation State: Opened */
         .envelope-wrapper.opened .flap-top {
             transform: rotateX(180deg);
             z-index: 1;
         }
-        
+        .envelope-wrapper.opened .flap-bottom {
+            transform: rotateX(-180deg);
+            z-index: 1;
+        }
         .envelope-wrapper.opened {
             pointer-events: none;
             opacity: 0;
-            transition-delay: 1s; /* Wait for flap to open */
         }
 
-        /* --- MAIN CONTENT (Hidden initially behind envelope logic visually) --- */
+        /* --- MAIN CONTENT --- */
         .main-content {
-            display: none; /* JS will show this */
-            opacity: 0;
-            transition: opacity 1s ease;
+            display: none; opacity: 0;
+            transition: opacity 1.5s ease;
         }
+        .main-content.visible { display: block; opacity: 1; }
 
-        .main-content.visible {
-            display: block;
-            opacity: 1;
-        }
-
-        /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80'); /* Placeholder image */
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
+            background: linear-gradient(rgba(26,31,44,0.6), rgba(26,31,44,0.6)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover; background-position: center;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; position: relative;
         }
+
+        .names-container { min-height: 120px; margin-bottom: 20px; }
 
         .names {
             font-family: 'Great Vibes', cursive;
-            font-size: 5rem;
-            color: var(--gold);
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
+            font-size: 5.5rem; color: var(--gold);
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid var(--gold);
+            width: 0;
+            animation: typing 3s steps(30, end) forwards, blink-caret .75s step-end infinite;
+            animation-delay: 1s;
         }
+
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--gold); } }
 
         .date-hero {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            color: white;
-            letter-spacing: 5px;
+            font-size: 2.5rem; color: white; letter-spacing: 5px;
+            opacity: 0; animation: fadeIn 2s ease forwards; animation-delay: 3.5s;
         }
 
         .scroll-down {
-            position: absolute;
-            bottom: 30px;
-            color: var(--gold);
-            font-size: 2rem;
-            animation: bounce 2s infinite;
+            position: absolute; bottom: 30px; color: var(--gold);
+            font-size: 2rem; opacity: 0; animation: fadeIn 2s ease forwards, bounce 2s infinite; animation-delay: 4s;
         }
 
-        /* Countdown Section */
+        @keyframes fadeIn { to { opacity: 1; } }
+
         .countdown-section {
-            background-color: var(--dark-bg);
-            padding: 80px 20px;
-            text-align: center;
-            color: white;
+            background-color: var(--dark-bg); padding: 80px 20px; text-align: center; color: white;
         }
+        .timer { display: flex; justify-content: center; gap: 40px; margin-bottom: 40px; font-family: 'Cormorant Garamond', serif; }
+        .time-box { display: flex; flex-direction: column; align-items: center; }
+        .number { font-size: 4rem; color: var(--gold); font-style: italic; }
+        .label { font-size: 1rem; color: #aaa; margin-top: 10px; }
+        .story-text { max-width: 800px; margin: 0 auto; font-size: 1.2rem; line-height: 1.8; color: #ddd; }
 
-        .timer {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 40px;
-            font-family: 'Cormorant Garamond', serif;
-        }
+        .schedule-section { background-color: #151924; padding: 80px 20px; color: white; }
+        .timeline-item { display: flex; align-items: flex-start; margin-bottom: 60px; max-width: 800px; margin: 0 auto 60px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; }
+        .time-col { width: 150px; font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--gold); text-align: right; padding-right: 30px; flex-shrink: 0; }
+        .details-col h3 { font-size: 2rem; margin-bottom: 10px; color: var(--gold); }
+        .details-col p { font-size: 1.1rem; color: #ccc; margin-bottom: 15px; }
+        .map-btn { display: inline-block; padding: 10px 25px; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; border-radius: 30px; font-size: 0.9rem; transition: all 0.3s; }
+        .map-btn:hover { background: var(--gold); color: var(--dark-bg); }
 
-        .time-box {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
+        .rsvp-section { background-color: var(--light-bg); padding: 80px 20px; color: var(--text-dark); text-align: center; }
+        .rsvp-form { max-width: 600px; margin: 40px auto; text-align: left; }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; margin-bottom: 15px; font-size: 1.2rem; font-weight: 600; }
+        .radio-group, .checkbox-group { display: flex; flex-direction: column; gap: 15px; }
+        .custom-radio, .custom-checkbox { display: flex; align-items: center; cursor: pointer; }
+        .custom-radio input, .custom-checkbox input { display: none; }
+        .checkmark { width: 20px; height: 20px; border: 2px solid #ccc; border-radius: 50%; margin-right: 15px; position: relative; }
+        .custom-checkbox .checkmark { border-radius: 4px; }
+        .custom-radio input:checked + .checkmark { border-color: var(--gold); background: var(--gold); }
+        .custom-checkbox input:checked + .checkmark { border-color: var(--gold); background: var(--gold); }
+        .submit-btn { background-color: var(--dark-bg); color: white; border: none; padding: 15px 40px; font-size: 1.1rem; cursor: pointer; border-radius: 5px; margin-top: 20px; transition: background 0.3s; }
+        .submit-btn:hover { background-color: #2c3e50; }
 
-        .number {
-            font-size: 4rem;
-            color: var(--gold);
-            font-style: italic;
-        }
-
-        .label {
-            font-size: 1rem;
-            color: #aaa;
-            margin-top: 10px;
-        }
-
-        .story-text {
-            max-width: 800px;
-            margin: 0 auto;
-            font-size: 1.2rem;
-            line-height: 1.8;
-            color: #ddd;
-        }
-
-        /* Schedule Section */
-        .schedule-section {
-            background-color: #151924;
-            padding: 80px 20px;
-            color: white;
-        }
-
-        .timeline-item {
-            display: flex;
-            align-items: flex-start;
-            margin-bottom: 60px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 40px;
-        }
-
-        .time-col {
-            width: 150px;
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.5rem;
-            color: var(--gold);
-            text-align: right;
-            padding-right: 30px;
-            flex-shrink: 0;
-        }
-
-        .details-col h3 {
-            font-size: 2rem;
-            margin-bottom: 10px;
-            color: var(--gold);
-        }
-
-        .details-col p {
-            font-size: 1.1rem;
-            color: #ccc;
-            margin-bottom: 15px;
-        }
-
-        .map-btn {
-            display: inline-block;
-            padding: 10px 25px;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            text-decoration: none;
-            border-radius: 30px;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .map-btn:hover {
-            background: var(--gold);
-            color: var(--dark-bg);
-        }
-
-        /* RSVP Section */
-        .rsvp-section {
-            background-color: var(--light-bg);
-            padding: 80px 20px;
-            color: var(--text-dark);
-            text-align: center;
-        }
-
-        .rsvp-form {
-            max-width: 600px;
-            margin: 40px auto;
-            text-align: left;
-        }
-
-        .form-group {
-            margin-bottom: 30px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 15px;
-            font-size: 1.2rem;
-            font-weight: 600;
-        }
-
-        .radio-group, .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .custom-radio, .custom-checkbox {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-        }
-
-        .custom-radio input, .custom-checkbox input {
-            display: none;
-        }
-
-        .checkmark {
-            width: 20px;
-            height: 20px;
-            border: 2px solid #ccc;
-            border-radius: 50%;
-            margin-right: 15px;
-            position: relative;
-        }
-
-        .custom-checkbox .checkmark {
-            border-radius: 4px;
-        }
-
-        .custom-radio input:checked + .checkmark {
-            border-color: var(--gold);
-            background: var(--gold);
-        }
-        
-        .custom-checkbox input:checked + .checkmark {
-            border-color: var(--gold);
-            background: var(--gold);
-        }
-
-        .submit-btn {
-            background-color: var(--dark-bg);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-top: 20px;
-            transition: background 0.3s;
-        }
-
-        .submit-btn:hover {
-            background-color: #2c3e50;
-        }
-
-        /* Floating Buttons */
-        .floating-buttons {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            z-index: 100;
-        }
-
-        .float-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 24px;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .whatsapp { background-color: #25D366; }
-        .help { background-color: #ff5e5e; }
-
-        /* Language Switcher */
-        .lang-switch {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            background: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            z-index: 100;
-            display: flex;
-            gap: 10px;
-        }
+        .floating-buttons { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 100; }
+        .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 24px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .whatsapp { background-color: #25D366; } .help { background-color: #ff5e5e; }
+        .lang-switch { position: fixed; top: 20px; left: 20px; background: white; padding: 5px 10px; border-radius: 5px; z-index: 100; display: none; gap: 10px; }
         .lang-switch img { width: 25px; cursor: pointer; }
+        .top-nav-btn { position: fixed; top: 20px; right: 20px; background: black; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; z-index: 100; font-weight: bold; display: none; }
 
-        .top-nav-btn {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: black;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            z-index: 100;
-            font-weight: bold;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .names { font-size: 3.5rem; }
-            .timer { gap: 20px; }
-            .number { font-size: 2.5rem; }
+            .timer { gap: 20px; } .number { font-size: 2.5rem; }
             .timeline-item { flex-direction: column; }
             .time-col { text-align: left; margin-bottom: 10px; width: 100%; }
         }
@@ -458,13 +218,12 @@
 </head>
 <body>
 
-    <!-- Language & Nav (Visible after opening) -->
-    <div class="lang-switch" id="langSwitch" style="display:none;">
+    <div class="lang-switch" id="langSwitch">
         <img src="https://flagcdn.com/w40/am.png" alt="AM">
         <img src="https://flagcdn.com/w40/gb.png" alt="EN">
         <img src="https://flagcdn.com/w40/ru.png" alt="RU">
     </div>
-    <a href="#rsvp" class="top-nav-btn" id="navBtn" style="display:none;">Պատվիրել</a>
+    <a href="#rsvp" class="top-nav-btn" id="navBtn">Պատվիրել</a>
 
     <!-- ENVELOPE ANIMATION -->
     <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
@@ -485,51 +244,36 @@
 
     <!-- MAIN CONTENT -->
     <div class="main-content" id="mainContent">
-        
-        <!-- Hero Section -->
         <section class="hero">
-            <h1 class="names">Karine & Arsen</h1>
+            <div class="names-container">
+                <h1 class="names">Karine & Arsen</h1>
+            </div>
             <div class="date-hero">01.10.2026</div>
             <div class="scroll-down">⌄</div>
         </section>
 
-        <!-- Countdown Section -->
         <section class="countdown-section">
             <div class="timer">
-                <div class="time-box">
-                    <span class="number" id="days">44</span>
-                    <span class="label">Օր</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="hours">18</span>
-                    <span class="label">ամ</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="minutes">32</span>
-                    <span class="label">Րոպե</span>
-                </div>
-                <div class="time-box">
-                    <span class="number" id="seconds">0</span>
-                    <span class="label">Վայրկյան</span>
-                </div>
+                <div class="time-box"><span class="number" id="days">00</span><span class="label">Օր</span></div>
+                <div class="time-box"><span class="number" id="hours">00</span><span class="label">ամ</span></div>
+                <div class="time-box"><span class="number" id="minutes">00</span><span class="label">Րոպե</span></div>
+                <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Վայրկյան</span></div>
             </div>
             <p class="story-text">
-                Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարժան Ձեր ներկայությամբ։ 
+                Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարան Ձեր ներկայությամբ։ 
                 Մեծ սիրով հրավիրում ենք եզ մեր երջանիկ օրվա մասնակիցը լինելու։
             </p>
         </section>
 
-        <!-- Schedule Section -->
         <section class="schedule-section">
             <div class="timeline-item">
                 <div class="time-col">11:00</div>
                 <div class="details-col">
                     <h3>Հարսի տուն</h3>
-                    <p>ոմիտաս 51</p>
-                    <a href="#" class="map-btn">նչպես հասնել</a>
+                    <p>Կոմիտաս 51</p>
+                    <a href="#" class="map-btn">Ինչպես հասնել</a>
                 </div>
             </div>
-            
             <div class="timeline-item">
                 <div class="time-col">13:00</div>
                 <div class="details-col">
@@ -539,7 +283,6 @@
                     <a href="#" class="map-btn">Ինչպես հասնել</a>
                 </div>
             </div>
-
             <div class="timeline-item">
                 <div class="time-col">17:00</div>
                 <div class="details-col">
@@ -550,102 +293,90 @@
             </div>
         </section>
 
-        <!-- RSVP Section -->
         <section class="rsvp-section" id="rsvp">
             <h2>Խնդրում ենք հաստատել Ձեր ներկայությունը</h2>
             <p style="margin-top: 10px; color: #666;">Սպասում ենք Ձեր պատասխանին մինչև 22.09.26</p>
-
             <form class="rsvp-form">
                 <div class="form-group">
-                    <label>Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
+                    <label>կարողանա՞ք ներկա գտնվել միջոցառմանը</label>
                     <div class="radio-group">
-                        <label class="custom-radio">
-                            <input type="radio" name="attendance" value="yes">
-                            <span class="checkmark"></span>
-                            Այո, կգամ
-                        </label>
-                        <label class="custom-radio">
-                            <input type="radio" name="attendance" value="no">
-                            <span class="checkmark"></span>
-                            Ցավոք, չեմ կարող
-                        </label>
+                        <label class="custom-radio"><input type="radio" name="attendance" value="yes"><span class="checkmark"></span>Այո, կգամ</label>
+                        <label class="custom-radio"><input type="radio" name="attendance" value="no"><span class="checkmark"></span>Ցավոք, չեմ կարող</label>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Ում կողմից եք հրավիրված</label>
                     <div class="checkbox-group">
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="side" value="bride">
-                            <span class="checkmark"></span>
-                            Արսենի
-                        </label>
-                        <label class="custom-checkbox">
-                            <input type="checkbox" name="side" value="groom">
-                            <span class="checkmark"></span>
-                            Կարինեի
-                        </label>
+                        <label class="custom-checkbox"><input type="checkbox" name="side" value="bride"><span class="checkmark"></span>Արսենի</label>
+                        <label class="custom-checkbox"><input type="checkbox" name="side" value="groom"><span class="checkmark"></span>արինեի</label>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label>Անուն, Ազգանուն</label>
-                    <input type="text" placeholder="Գրեք Ձեր անունը" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <input type="text" placeholder="Գրեք եր անունը" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
                 </div>
-
                 <button type="button" class="submit-btn">Ուղարկել</button>
             </form>
         </section>
 
-        <!-- Floating Buttons -->
         <div class="floating-buttons">
             <a href="#" class="float-btn whatsapp">💬</a>
             <a href="#" class="float-btn help">?</a>
         </div>
-
     </div>
 
     <script>
-        // Envelope Opening Logic
+        // ---------------------------------------------------------
+        // 1. ԱՅՍՏԵՂ ԴՐԵՔ ՁԵՐ ԵՐԱԺՇՏՈՒԹՅԱՆ LINK-Ը
+        // ---------------------------------------------------------
+        const musicUrl = 'https://cdn.shopify.com/s/files/1/0765/3710/2528/files/Wedding_Music_-_Weddind_March_pesni.fm.mp3?v=1787006181'; 
+        
+        // Ստեղծում ենք audio object-ը
+        const bgMusic = new Audio(musicUrl);
+        bgMusic.loop = true; // Երաժշտությունը կկրկնվի (loop)
+        bgMusic.volume = 0.5; // այնի ուժգնությունը (0.0 - 1.0)
+
         function openEnvelope() {
             const wrapper = document.getElementById('envelopeWrapper');
             const mainContent = document.getElementById('mainContent');
             const langSwitch = document.getElementById('langSwitch');
             const navBtn = document.getElementById('navBtn');
 
-            // Add class to trigger CSS animation
+            // ՄԻԱՑՆՒՄ ԵՔ ԵՐԱՇՏՈՒԹՅՈՒՆԸ
+            bgMusic.play().catch(error => {
+                console.log("Audio play failed (browser policy):", error);
+            });
+
             wrapper.classList.add('opened');
 
-            // Wait for animation to finish, then hide envelope and show content
             setTimeout(() => {
                 wrapper.style.display = 'none';
                 mainContent.classList.add('visible');
                 langSwitch.style.display = 'flex';
                 navBtn.style.display = 'block';
-            }, 1200); // 1.2 seconds delay
+            }, 1500);
         }
 
-        // Simple Countdown Timer Logic (Set to Oct 1, 2026)
         const weddingDate = new Date("October 1, 2026 11:00:00").getTime();
-
         const timerInterval = setInterval(function() {
             const now = new Date().getTime();
             const distance = weddingDate - now;
+
+            if (distance < 0) {
+                clearInterval(timerInterval);
+                document.querySelector(".timer").innerHTML = "<div style='font-size:2rem; color:#d4af37;'>Շնորհավոր Ձեր հարսանիքը!</div>";
+                return;
+            }
 
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById("days").innerHTML = days;
-            document.getElementById("hours").innerHTML = hours;
-            document.getElementById("minutes").innerHTML = minutes;
-            document.getElementById("seconds").innerHTML = seconds;
-
-            if (distance < 0) {
-                clearInterval(timerInterval);
-                document.querySelector(".timer").innerHTML = "EXPIRED";
-            }
+            document.getElementById("days").innerHTML = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerHTML = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerHTML = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerHTML = seconds.toString().padStart(2, '0');
         }, 1000);
     </script>
 </body>
