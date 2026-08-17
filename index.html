@@ -25,7 +25,6 @@
             background-color: var(--dark-bg);
             overflow-x: hidden;
             color: white;
-            scroll-behavior: smooth;
         }
 
         /* --- ENVELOPE ANIMATION SECTION --- */
@@ -35,7 +34,8 @@
             background-color: var(--dark-bg);
             display: flex; justify-content: center; align-items: center;
             z-index: 1000;
-            transition: opacity 1s ease 2s; /* Fade out after opening animation */
+            /* Smooth fade out transition */
+            transition: opacity 1.5s ease-in-out, visibility 1.5s; 
         }
 
         .envelope-container {
@@ -58,7 +58,8 @@
             background: var(--envelope-flap);
             clip-path: polygon(0 0, 50% 100%, 100% 0);
             transform-origin: top;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.6s;
+            /* Slower, smoother opening animation */
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.75s;
             z-index: 20;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -69,7 +70,7 @@
             background: var(--envelope-color);
             clip-path: polygon(0 100%, 50% 0, 100% 100%);
             z-index: 15;
-            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             transform-origin: bottom;
         }
 
@@ -122,22 +123,30 @@
             transform: rotateX(-180deg);
             z-index: 1;
         }
-        .envelope-wrapper.opened {
-            pointer-events: none;
+        
+        /* Hide envelope smoothly after opening */
+        .envelope-wrapper.hidden {
             opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
         }
 
         /* --- MAIN CONTENT --- */
         .main-content {
-            display: none; opacity: 0;
-            transition: opacity 1.5s ease;
+            display: none; 
+            opacity: 0;
+            transition: opacity 2s ease-in;
         }
-        .main-content.visible { display: block; opacity: 1; }
+        .main-content.visible { 
+            display: block; 
+            opacity: 1; 
+        }
 
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(26,31,44,0.6), rgba(26,31,44,0.6)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            /* Replace with your couple photo URL */
+            background: linear-gradient(rgba(26,31,44,0.5), rgba(26,31,44,0.5)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; position: relative;
@@ -153,8 +162,9 @@
             white-space: nowrap;
             border-right: 2px solid var(--gold);
             width: 0;
-            animation: typing 3s steps(30, end) forwards, blink-caret .75s step-end infinite;
-            animation-delay: 0.5s; /* Start typing shortly after click */
+            /* Typewriter effect starts after envelope opens */
+            animation: typing 3.5s steps(30, end) forwards, blink-caret .75s step-end infinite;
+            animation-delay: 1s; 
         }
 
         @keyframes typing { from { width: 0; } to { width: 100%; } }
@@ -163,12 +173,12 @@
         .date-hero {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2.5rem; color: white; letter-spacing: 5px;
-            opacity: 0; animation: fadeIn 2s ease forwards; animation-delay: 3.5s;
+            opacity: 0; animation: fadeIn 2s ease forwards; animation-delay: 4s;
         }
 
         .scroll-down {
             position: absolute; bottom: 30px; color: var(--gold);
-            font-size: 2rem; opacity: 0; animation: fadeIn 2s ease forwards, bounce 2s infinite; animation-delay: 4s;
+            font-size: 2rem; opacity: 0; animation: fadeIn 2s ease forwards, bounce 2s infinite; animation-delay: 4.5s;
         }
 
         @keyframes fadeIn { to { opacity: 1; } }
@@ -184,13 +194,7 @@
         .story-text { max-width: 800px; margin: 0 auto; font-size: 1.2rem; line-height: 1.8; color: #ddd; }
 
         /* Schedule Section */
-        .schedule-section { 
-            background-color: #151924; 
-            padding: 80px 20px; 
-            color: white; 
-            background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiMxNTE5MjQiLz48L3N2Zz4='); /* Placeholder for map pattern */
-            background-size: cover;
-        }
+        .schedule-section { background-color: #151924; padding: 80px 20px; color: white; }
         .timeline-item { display: flex; align-items: flex-start; margin-bottom: 60px; max-width: 800px; margin: 0 auto 60px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px; }
         .time-col { width: 150px; font-family: 'Cormorant Garamond', serif; font-size: 2.5rem; color: var(--gold); text-align: right; padding-right: 30px; flex-shrink: 0; }
         .details-col h3 { font-size: 2rem; margin-bottom: 10px; color: var(--gold); }
@@ -198,20 +202,8 @@
         .map-btn { display: inline-block; padding: 10px 25px; border: 1px solid var(--gold); color: var(--gold); text-decoration: none; border-radius: 30px; font-size: 0.9rem; transition: all 0.3s; }
         .map-btn:hover { background: var(--gold); color: var(--dark-bg); }
 
-        /* Dress Code Section */
-        .dress-code-section {
-            background-color: var(--light-bg);
-            padding: 80px 20px;
-            color: var(--text-dark);
-            text-align: center;
-        }
-        .dress-code-title { font-family: 'Cormorant Garamond', serif; font-size: 3rem; margin-bottom: 20px; }
-        .dress-code-desc { max-width: 700px; margin: 0 auto 40px; font-size: 1.1rem; line-height: 1.6; }
-        .dress-images { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
-        .dress-img { width: 300px; height: 400px; object-fit: cover; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-
         /* RSVP Section */
-        .rsvp-section { background-color: var(--light-bg); padding: 80px 20px; color: var(--text-dark); text-align: center; border-top: 1px solid #eee; }
+        .rsvp-section { background-color: var(--light-bg); padding: 80px 20px; color: var(--text-dark); text-align: center; }
         .rsvp-form { max-width: 600px; margin: 40px auto; text-align: left; }
         .form-group { margin-bottom: 30px; }
         .form-group label { display: block; margin-bottom: 15px; font-size: 1.2rem; font-weight: 600; }
@@ -229,11 +221,8 @@
         .floating-buttons { position: fixed; bottom: 30px; right: 30px; display: flex; flex-direction: column; gap: 15px; z-index: 100; }
         .float-btn { width: 50px; height: 50px; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-size: 24px; text-decoration: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
         .whatsapp { background-color: #25D366; } .help { background-color: #ff5e5e; }
-        
-        .lang-switch { position: fixed; top: 20px; left: 20px; background: white; padding: 5px 10px; border-radius: 5px; z-index: 100; display: none; gap: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .lang-switch img { width: 25px; cursor: pointer; opacity: 0.6; transition: opacity 0.3s; }
-        .lang-switch img.active { opacity: 1; border-bottom: 2px solid var(--gold); }
-        
+        .lang-switch { position: fixed; top: 20px; left: 20px; background: white; padding: 5px 10px; border-radius: 5px; z-index: 100; display: none; gap: 10px; }
+        .lang-switch img { width: 25px; cursor: pointer; }
         .top-nav-btn { position: fixed; top: 20px; right: 20px; background: black; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; z-index: 100; font-weight: bold; display: none; }
 
         /* Music Control */
@@ -245,51 +234,40 @@
         }
         .music-control svg { fill: white; width: 20px; height: 20px; }
 
-        /* Footer */
-        .footer {
-            background-color: var(--dark-bg);
-            padding: 40px 20px;
-            text-align: center;
-            color: #aaa;
-            font-family: 'Cormorant Garamond', serif;
-        }
-        .footer-logo { font-family: 'Great Vibes', cursive; font-size: 3rem; color: white; margin: 10px 0; }
-
         /* Responsive */
         @media (max-width: 768px) {
             .names { font-size: 3.5rem; }
             .timer { gap: 20px; } .number { font-size: 2.5rem; }
             .timeline-item { flex-direction: column; }
             .time-col { text-align: left; margin-bottom: 10px; width: 100%; }
-            .dress-img { width: 100%; height: auto; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Language Switcher -->
+    <!-- Language & Nav -->
     <div class="lang-switch" id="langSwitch">
-        <img src="https://flagcdn.com/w40/am.png" alt="AM" onclick="setLanguage('am')" class="active" id="flag-am">
-        <img src="https://flagcdn.com/w40/gb.png" alt="EN" onclick="setLanguage('en')" id="flag-en">
-        <img src="https://flagcdn.com/w40/ru.png" alt="RU" onclick="setLanguage('ru')" id="flag-ru">
+        <img src="https://flagcdn.com/w40/am.png" alt="AM">
+        <img src="https://flagcdn.com/w40/gb.png" alt="EN">
+        <img src="https://flagcdn.com/w40/ru.png" alt="RU">
     </div>
-
+    
     <!-- Music Control Button -->
     <div class="music-control" id="musicBtn" onclick="toggleMusic()">
         <svg id="pauseIcon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
         <svg id="playIcon" viewBox="0 0 24 24" style="display:none;"><path d="M8 5v14l11-7z"/></svg>
     </div>
 
-    <a href="#rsvp" class="top-nav-btn" id="navBtn" data-key="order">Պատվիրել</a>
+    <a href="#rsvp" class="top-nav-btn" id="navBtn">Պատվիրել</a>
 
     <!-- ENVELOPE ANIMATION -->
     <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
         <div class="envelope-container">
             <div class="flap-top">
                 <div class="wax-seal">hyoor</div>
-                <div class="open-text" data-key="open_here">
+                <div class="open-text">
                     <div class="arrow">↓</div>
-                    Բացել<br>այստեղ
+                    ացել<br>այստեղ
                 </div>
             </div>
             <div class="flap-left"></div>
@@ -308,19 +286,19 @@
                 <h1 class="names">Karine & Arsen</h1>
             </div>
             <div class="date-hero">01.10.2026</div>
-            <div class="scroll-down"></div>
+            <div class="scroll-down">⌄</div>
         </section>
 
         <!-- Countdown Section -->
         <section class="countdown-section">
             <div class="timer">
-                <div class="time-box"><span class="number" id="days">00</span><span class="label" data-key="days">Օր</span></div>
-                <div class="time-box"><span class="number" id="hours">00</span><span class="label" data-key="hours">Ժամ</span></div>
-                <div class="time-box"><span class="number" id="minutes">00</span><span class="label" data-key="minutes">Րոպե</span></div>
-                <div class="time-box"><span class="number" id="seconds">00</span><span class="label" data-key="seconds">Վայրկյան</span></div>
+                <div class="time-box"><span class="number" id="days">00</span><span class="label">ր</span></div>
+                <div class="time-box"><span class="number" id="hours">00</span><span class="label">ամ</span></div>
+                <div class="time-box"><span class="number" id="minutes">00</span><span class="label">ոպե</span></div>
+                <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Վայրկյան</span></div>
             </div>
-            <p class="story-text" data-key="story">
-                Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարժան եր ներկայությամբ։ 
+            <p class="story-text">
+                Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարժան Ձեր ներկայությամբ։ 
                 Մեծ սիրով հրավիրում ենք եզ մեր երջանիկ օրվա մասնակիցը լինելու։
             </p>
         </section>
@@ -330,72 +308,55 @@
             <div class="timeline-item">
                 <div class="time-col">11:00</div>
                 <div class="details-col">
-                    <h3 data-key="bride_home">Հարսի տուն</h3>
+                    <h3>Հարսի տուն</h3>
                     <p>Կոմիտաս 51</p>
-                    <a href="#" class="map-btn" data-key="how_to_get">Ինչպես հասնել</a>
+                    <a href="#" class="map-btn">Ինչպես հասնել</a>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="time-col">13:00</div>
                 <div class="details-col">
-                    <h3 data-key="ceremony">Պսակադրություն</h3>
-                    <p>ուրբ Աստվածածին եկեղեցի</p>
+                    <h3>Պսակադրություն</h3>
+                    <p>Սուրբ Աստվածածին եկեղեցի</p>
                     <p>21 Իսրայելյան փող.</p>
-                    <a href="#" class="map-btn" data-key="how_to_get">Ինչպես հասնել</a>
+                    <a href="#" class="map-btn">Ինչպես հասնել</a>
                 </div>
             </div>
             <div class="timeline-item">
                 <div class="time-col">17:00</div>
                 <div class="details-col">
-                    <h3 data-key="party">Հարսանեկան խնջույք</h3>
-                    <p>«լորենս» ռեստորան</p>
-                    <a href="#" class="map-btn" data-key="how_to_get">Ինչպես հասնել</a>
+                    <h3>Հարսանեկան նջույք</h3>
+                    <p>«Ֆլորենս» եստորան</p>
+                    <a href="#" class="map-btn">Ինչպես հասնել</a>
                 </div>
-            </div>
-        </section>
-
-        <!-- Dress Code Section -->
-        <section class="dress-code-section">
-            <h2 class="dress-code-title" data-key="dress_code_title">Հագուստի կոդ</h2>
-            <p class="dress-code-desc" data-key="dress_code_desc">
-                Ձեր ներկայությունը մեզ համար մեծագույն նվեր է, սակայն ուրախ կլինենք, եթե ներկա լինեք մեր հարսանիքում գրավիչներով՝ ստեղծելով էլ ավելի ներդաշնակ մթնոլորտ։
-            </p>
-            <div class="dress-images">
-                <!-- Placeholder images for dress code -->
-                <img src="https://images.unsplash.com/photo-1566174053879-31528523f8ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Women Dress" class="dress-img">
-                <img src="https://images.unsplash.com/photo-1593032465175-d81f0f53d35f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Men Suit" class="dress-img">
             </div>
         </section>
 
         <!-- RSVP Section -->
         <section class="rsvp-section" id="rsvp">
-            <h2 data-key="rsvp_title">Խնդրում ենք հաստատել Ձեր ներկայությունը</h2>
-            <p style="margin-top: 10px; color: #666;" data-key="rsvp_deadline">Սպասում ենք Ձեր պատասխանին մինչև 22.09.26</p>
+            <h2>Խնդրում ենք հաստատել Ձեր ներկայությունը</h2>
+            <p style="margin-top: 10px; color: #666;">Սպասում ենք Ձեր պատասխանին մինչև 22.09.26</p>
             <form class="rsvp-form">
                 <div class="form-group">
-                    <label data-key="attendance_q">Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
+                    <label>Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
                     <div class="radio-group">
-                        <label class="custom-radio"><input type="radio" name="attendance" value="yes"><span class="checkmark"></span><span data-key="yes">Այո, կգամ</span></label>
-                        <label class="custom-radio"><input type="radio" name="attendance" value="no"><span class="checkmark"></span><span data-key="no">Ցավոք, չեմ կարող</span></label>
+                        <label class="custom-radio"><input type="radio" name="attendance" value="yes"><span class="checkmark"></span>Այո, կգամ</label>
+                        <label class="custom-radio"><input type="radio" name="attendance" value="no"><span class="checkmark"></span>Ցավոք, չեմ կարող</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label data-key="side_q">Ում կողմից եք հրավիրված</label>
+                    <label>Ում կողմից եք հրավիրված</label>
                     <div class="checkbox-group">
-                        <label class="custom-checkbox"><input type="checkbox" name="side" value="groom"><span class="checkmark"></span><span data-key="groom_side">Արսենի</span></label>
-                        <label class="custom-checkbox"><input type="checkbox" name="side" value="bride"><span class="checkmark"></span><span data-key="bride_side">Կարինեի</span></label>
+                        <label class="custom-checkbox"><input type="checkbox" name="side" value="bride"><span class="checkmark"></span>Արսենի</label>
+                        <label class="custom-checkbox"><input type="checkbox" name="side" value="groom"><span class="checkmark"></span>Կարինեի</label>
                     </div>
                 </div>
                 <div class="form-group">
-                    <label data-key="name_label">Անուն, Ազգանուն</label>
-                    <input type="text" placeholder="րեք Ձեր անունը" data-key-placeholder="name_placeholder" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                    <label>Անուն, Ազգանուն</label>
+                    <input type="text" placeholder="Գրեք Ձեր անունը" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
                 </div>
-                <button type="button" class="submit-btn" data-key="send_btn">Ուղարկել</button>
+                <button type="button" class="submit-btn">Ուղարկել</button>
             </form>
-            
-            <div style="margin-top: 60px; font-family: 'Great Vibes', cursive; font-size: 4rem; color: var(--gold); opacity: 0.5;">
-                See You Soon!
-            </div>
         </section>
 
         <!-- Floating Buttons -->
@@ -405,19 +366,13 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <div class="footer">
-        <p data-key="footer_text">Ձեր գեղեցիկ օրվա համար</p>
-        <div class="footer-logo">hyoor</div>
-        <p style="font-size: 0.8rem;">Your Guests, Our Priority.</p>
-    </div>
-
     <script>
         // ---------------------------------------------------------
         // 1. MUSIC SETUP
         // ---------------------------------------------------------
-        // ոխարինեք այս link-ը ձեր mp3 ֆայլի հղումով
+        // Փոխարինեք այս link-ը ձեր mp3 ֆայլի հղումով
         const musicUrl = 'https://cdn.shopify.com/s/files/1/0765/3710/2528/files/Wedding_Music_-_Weddind_March_pesni.fm.mp3?v=1787006181'; 
+        
         const bgMusic = new Audio(musicUrl);
         bgMusic.loop = true;
         bgMusic.volume = 0.5;
@@ -429,7 +384,7 @@
             const navBtn = document.getElementById('navBtn');
             const musicBtn = document.getElementById('musicBtn');
 
-            // PLAY MUSIC IMMEDIATELY ON CLICK
+            // PLAY MUSIC IMMEDIATELY ON CLICK (This ensures it works)
             bgMusic.play().catch(error => {
                 console.log("Audio play failed:", error);
             });
@@ -437,14 +392,20 @@
             // Show music control button
             musicBtn.style.display = 'flex';
 
-            // Trigger animations
+            // Trigger CSS animations for opening flaps
             wrapper.classList.add('opened');
 
+            // Wait for flaps to open (1.5s), then fade out the whole envelope
             setTimeout(() => {
-                wrapper.style.display = 'none';
-                mainContent.classList.add('visible');
-                langSwitch.style.display = 'flex';
-                navBtn.style.display = 'block';
+                wrapper.classList.add('hidden');
+                
+                // Show main content slightly before envelope fully disappears for smooth transition
+                setTimeout(() => {
+                    mainContent.classList.add('visible');
+                    langSwitch.style.display = 'flex';
+                    navBtn.style.display = 'block';
+                }, 500); 
+
             }, 1500);
         }
 
@@ -461,76 +422,7 @@
         }
 
         // ---------------------------------------------------------
-        // 2. LANGUAGE SWITCHER
-        // ---------------------------------------------------------
-        const translations = {
-            am: {
-                order: "Պատվիրել",
-                open_here: "<div class='arrow'>↓</div>Բացել<br>այստեղ",
-                days: "Օր", hours: "Ժամ", minutes: "Րոպե", seconds: "այրկյան",
-                story: "Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարժան Ձեր ներկայությամբ։ Մեծ սիրով հրավիրում ենք եզ մեր երջանիկ օրվա մասնակիցը լինելու։",
-                bride_home: "Հարսի տուն", ceremony: "Պսակադրություն", party: "Հարսանեկան խնջույք", how_to_get: "Ինչպես հասնել",
-                dress_code_title: "Հագուստի կոդ", dress_code_desc: "Ձեր ներկայությունը մեզ համար մեծագույն նվեր է, սակայն ուրախ կլինենք, եթե ներկա լինեք մեր հարսանիքում գրավիչներով՝ ստեղծելով էլ ավելի ներդաշնակ մթնոլորտ։",
-                rsvp_title: "Խնդրում ենք հաստատել Ձեր ներկայությունը", rsvp_deadline: "Սպասում ենք Ձեր պատասխանին մինչև 22.09.26",
-                attendance_q: "Կկարողանա՞ք ներկա գտնվել միջոցառմանը", yes: "Այո, կգամ", no: "Ցավոք, չեմ կարող",
-                side_q: "Ում կողմից եք հրավիրված", groom_side: "Արսենի", bride_side: "Կարինեի",
-                name_label: "Անուն, Ազգանուն", name_placeholder: "Գրեք Ձեր անունը", send_btn: "Ուղարկել",
-                footer_text: "եր գեղեցիկ օրվա համար"
-            },
-            en: {
-                order: "RSVP",
-                open_here: "<div class='arrow'>↓</div>Open<br>here",
-                days: "Days", hours: "Hours", minutes: "Minutes", seconds: "Seconds",
-                story: "We love our journey together and it would be even more memorable with your presence. We warmly invite you to be part of our happy day.",
-                bride_home: "Bride's Home", ceremony: "Ceremony", party: "Wedding Party", how_to_get: "How to get there",
-                dress_code_title: "Dress Code", dress_code_desc: "Your presence is the greatest gift, but we would be delighted if you join us in formal attire to create an even more harmonious atmosphere.",
-                rsvp_title: "Please confirm your attendance", rsvp_deadline: "We await your reply by 22.09.26",
-                attendance_q: "Will you be able to attend?", yes: "Yes, I will attend", no: "Unfortunately, I cannot",
-                side_q: "Who invited you?", groom_side: "Arsen's side", bride_side: "Karine's side",
-                name_label: "Name, Surname", name_placeholder: "Enter your name", send_btn: "Send",
-                footer_text: "For your beautiful day"
-            },
-            ru: {
-                order: "Заказать",
-                open_here: "<div class='arrow'>↓</div>Открыть<br>здесь",
-                days: "Дней", hours: "Часов", minutes: "Минут", seconds: "Секунд",
-                story: "Мы любим наш совместный путь, и он станет еще более памятным с вашим присутствием. Мы тепло приглашаем вас стать частью нашего счастливого дня.",
-                bride_home: "Дом невесты", ceremony: "Венчание", party: "Банкет", how_to_get: "Как добраться",
-                dress_code_title: "Дресс-код", dress_code_desc: "Ваше присутствие - лучший подарок, но мы будем рады, если вы присоединитесь к нам в парадной одежде, создавая еще более гармоничную атмосферу.",
-                rsvp_title: "Пожалуйста, подтвердите ваше присутствие", rsvp_deadline: "Ждем вашего ответа до 22.09.26",
-                attendance_q: "Сможете ли вы присутствовать?", yes: "Да, я приду", no: "К сожалению, не смогу",
-                side_q: "От кого вы приглашены?", groom_side: "Со стороны Арсена", bride_side: "Со стороны Карине",
-                name_label: "Имя, Фамилия", name_placeholder: "Введите ваше имя", send_btn: "Отправить",
-                footer_text: "Для вашего прекрасного дня"
-            }
-        };
-
-        function setLanguage(lang) {
-            // Update active flag
-            document.querySelectorAll('.lang-switch img').forEach(img => img.classList.remove('active'));
-            document.getElementById(`flag-${lang}`).classList.add('active');
-
-            // Update text content
-            const elements = document.querySelectorAll('[data-key]');
-            elements.forEach(el => {
-                const key = el.getAttribute('data-key');
-                if (translations[lang][key]) {
-                    el.innerHTML = translations[lang][key];
-                }
-            });
-
-            // Update placeholders
-            const inputs = document.querySelectorAll('[data-key-placeholder]');
-            inputs.forEach(el => {
-                const key = el.getAttribute('data-key-placeholder');
-                if (translations[lang][key]) {
-                    el.placeholder = translations[lang][key];
-                }
-            });
-        }
-
-        // ---------------------------------------------------------
-        // 3. COUNTDOWN TIMER
+        // 2. COUNTDOWN TIMER
         // ---------------------------------------------------------
         const weddingDate = new Date("October 1, 2026 11:00:00").getTime();
         const timerInterval = setInterval(function() {
@@ -539,7 +431,7 @@
 
             if (distance < 0) {
                 clearInterval(timerInterval);
-                document.querySelector(".timer").innerHTML = "<div style='font-size:2rem; color:#d4af37;'>Happy Wedding Day!</div>";
+                document.querySelector(".timer").innerHTML = "<div style='font-size:2rem; color:#d4af37;'>Շնորհավոր Ձեր հարսանիքը!</div>";
                 return;
             }
 
