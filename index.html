@@ -19,7 +19,7 @@
             overflow-x: hidden;
         }
 
-        /* ✉️ Envelope Opening Overlay (Exact Video Style) */
+        /* ✉️ Real Envelope Opening Animation Overlay */
         #envelope-overlay {
             position: fixed;
             top: 0;
@@ -32,31 +32,31 @@
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            transition: visibility 1s;
+            transition: visibility 1.2s ease;
         }
 
-        /* Top and Bottom Envelope Flaps for opening animation */
+        /* Envelope Flaps */
         .envelope-flap-top, .envelope-flap-bottom {
             position: absolute;
             left: 0;
             width: 100%;
             height: 50vh;
-            background: #161b22;
-            border-bottom: 2px solid #21262d;
-            transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+            background: #1a212d;
+            border: 1px solid #2d3748;
+            transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
             z-index: 2;
         }
 
         .envelope-flap-top {
             top: 0;
             transform-origin: top;
+            border-bottom: 3px solid #d4af37;
         }
 
         .envelope-flap-bottom {
             bottom: 0;
             transform-origin: bottom;
-            border-top: 2px solid #21262d;
-            border-bottom: none;
+            border-top: 3px solid #d4af37;
         }
 
         #envelope-overlay.opened .envelope-flap-top {
@@ -67,14 +67,14 @@
             transform: translateY(100%);
         }
 
-        /* Envelope Content / Seal */
+        /* Envelope Content & Seal */
         .envelope-content {
             position: relative;
             z-index: 3;
             text-align: center;
             padding: 20px;
-            max-width: 600px;
-            transition: opacity 0.5s ease;
+            max-width: 650px;
+            transition: opacity 0.6s ease;
         }
 
         #envelope-overlay.opened .envelope-content {
@@ -84,10 +84,11 @@
 
         .invitation-top-text {
             font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            color: #e6edf3;
+            font-size: 2.2rem;
+            color: #f0f6fc;
             font-style: italic;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
         }
 
         .seal-btn {
@@ -95,52 +96,53 @@
             border: none;
             cursor: pointer;
             display: inline-block;
-            transition: transform 0.3s;
+            transition: transform 0.3s ease;
         }
 
         .seal-btn:hover {
-            transform: scale(1.08);
+            transform: scale(1.1);
         }
 
         .seal-circle {
-            width: 90px;
-            height: 90px;
-            background: #f0f6fc;
+            width: 100px;
+            height: 100px;
+            background: #fcf9f5;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
             margin: 0 auto 15px auto;
             border: 2px solid #d4af37;
         }
 
         .seal-circle span {
-            font-size: 0.7rem;
-            color: #333;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-size: 0.75rem;
+            color: #444;
+            font-weight: 700;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
         }
 
         .seal-logo {
             font-family: 'Playfair Display', serif;
-            font-size: 1rem;
+            font-size: 1.1rem;
             color: #d4af37;
             font-weight: bold;
         }
 
         .seal-instruction {
-            font-size: 0.95rem;
-            color: #8b949e;
+            font-size: 1rem;
+            color: #d4af37;
+            font-weight: 500;
             letter-spacing: 1px;
         }
 
         .envelope-bottom-text {
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: #8b949e;
+            margin-top: 25px;
+            font-size: 0.95rem;
+            color: #a0aec0;
             line-height: 1.6;
             font-style: italic;
         }
@@ -444,7 +446,7 @@
         <div class="envelope-content">
             <div class="invitation-top-text">Դուք հրավիրված եք մեր հարսանիքին</div>
             
-            <button class="seal-btn" onclick="openInvitation()">
+            <button class="seal-btn" onclick="openEnvelope()">
                 <div class="seal-circle">
                     <span>Բացել</span>
                     <div class="seal-logo">hyoor</div>
@@ -568,16 +570,16 @@
         const musicBtn = document.getElementById('musicToggle');
         const envelopeOverlay = document.getElementById('envelope-overlay');
 
-        function openInvitation() {
-            // Add class to trigger the top and bottom flap opening animation
+        function openEnvelope() {
+            // Trigger top and bottom envelope flaps sliding out like in the video
             envelopeOverlay.classList.add('opened');
             
-            // Completely remove overlay after animation completes
+            // Remove overlay completely after transition ends
             setTimeout(() => {
                 envelopeOverlay.style.display = 'none';
-            }, 1000);
+            }, 1200);
 
-            // Play background music
+            // Play background music instantly
             music.play().then(() => {
                 musicBtn.classList.add('playing');
             }).catch(e => {
