@@ -20,6 +20,71 @@
             overflow-x: hidden;
         }
 
+        /* ✉️ Envelope Opening Overlay */
+        #envelope-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: #11151c;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #envelope-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope-box {
+            text-align: center;
+            cursor: pointer;
+            padding: 40px;
+        }
+
+        .envelope-graphic {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: pulse-env 2s infinite;
+        }
+
+        @keyframes pulse-env {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .envelope-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #d4af37;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .open-btn {
+            background: #d4af37;
+            color: #161b22;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: 700;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .open-btn:hover {
+            background: #e2c04d;
+            transform: scale(1.05);
+        }
+
         /* Top Bar & Music */
         .top-bar {
             position: fixed;
@@ -59,9 +124,14 @@
             transition: 0.3s;
         }
 
-        .music-btn:hover {
+        .music-btn.playing {
             background: #d4af37;
             color: #161b22;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
         }
 
         /* Hero Section */
@@ -307,17 +377,34 @@
 </head>
 <body>
 
+    <!-- ✉️ Envelope Opening Overlay -->
+    <div id="envelope-overlay">
+        <div class="envelope-box" onclick="openInvitation()">
+            <div class="envelope-graphic">💌</div>
+            <div class="envelope-text">Դուք հրավիրված եք մեր հարսանիքին</div>
+            <button class="open-btn">Բացել հրավիրատոմսը</button>
+        </div>
+    </div>
+
+    <!-- Background Audio (Royalty free wedding melody example) -->
+    <audio id="bgMusic" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-tenderness.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Top Navigation Bar -->
     <div class="top-bar">
         <button class="lang-switch">AM / RU</button>
         <button class="music-btn" id="musicToggle">♫</button>
     </div>
 
+    <!-- Hero Section -->
     <section class="hero">
         <h1>Karine & Arsen</h1>
         <p>01.10.2026</p>
         <div class="scroll-down">⌄</div>
     </section>
 
+    <!-- Countdown Section -->
     <section class="section">
         <h2 class="section-title">Մինչ հարսանիք մնաց</h2>
         <p>Մենք սկսում ենք մեր համատեղ ճանապարհը և այն կդառնա առավել հիշարժան Ձեր ներկայությամբ:</p>
@@ -341,6 +428,7 @@
         </div>
     </section>
 
+    <!-- Gallery / Moments -->
     <section class="section">
         <h2 class="section-title">Մեր Պահերը</h2>
         <div class="gallery-grid">
@@ -356,6 +444,7 @@
         </div>
     </section>
 
+    <!-- Schedule / Timeline -->
     <section class="section">
         <h2 class="section-title">Օրվա Ծրագիր</h2>
         <div class="timeline">
@@ -380,6 +469,7 @@
         </div>
     </section>
 
+    <!-- RSVP Section -->
     <section class="section">
         <h2 class="section-title">Հարգելի Հյուրեր</h2>
         <p>Խնդրում ենք հաստատել Ձեր ներկայությունը մինչև 22.09.2026</p>
@@ -400,6 +490,7 @@
         </form>
     </section>
 
+    <!-- Footer -->
     <footer>
         <h2>Կհանդիպենք</h2>
         <p>Մեր գեղեցիկ օրվա համար</p>
@@ -407,14 +498,36 @@
     </footer>
 
     <script>
-        // Simple background music toggle simulation
+        const music = document.getElementById('bgMusic');
         const musicBtn = document.getElementById('musicToggle');
+        const envelopeOverlay = document.getElementById('envelope-overlay');
+
+        // Function to open envelope and start music
+        function openInvitation() {
+            envelopeOverlay.classList.add('hidden');
+            music.play().then(() => {
+                musicBtn.classList.add('playing');
+            }).catch(e => {
+                console.log("Audio autoplay restricted:", e);
+            });
+        }
+
+        // Music toggle button handler
         let isPlaying = false;
         musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                music.pause();
+                musicBtn.classList.remove('playing');
+            } else {
+                music.play();
+                musicBtn.classList.add('playing');
+            }
             isPlaying = !isPlaying;
-            musicBtn.style.background = isPlaying ? '#d4af37' : 'none';
-            musicBtn.style.color = isPlaying ? '#161b22' : '#d4af37';
         });
+
+        // Set initial state of isPlaying based on music play
+        music.onplay = () => { isPlaying = true; musicBtn.classList.add('playing'); };
+        music.onpause = () => { isPlaying = false; musicBtn.classList.remove('playing'); };
     </script>
 </body>
 </html>
