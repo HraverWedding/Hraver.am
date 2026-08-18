@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Karine & Arsen - Wedding Invitation</title>
+    <title>Mher & Lusine - Wedding Invitation</title>
     
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Great+Vibes&family=Noto+Sans+Armenian:wght@300;400;600&display=swap" rel="stylesheet">
@@ -11,9 +11,9 @@
     <style>
         :root {
             --gold: #d4af37;
-            --dark-bg: #1a1f2c;
-            --envelope-color: #252b3d;
-            --envelope-flap: #2d3548;
+            --dark-bg: #4a3b32; /* Brownish dark color from video */
+            --envelope-color: #5c4a3d;
+            --envelope-flap: #6b5647;
             --light-bg: #f9f6f0;
             --text-dark: #2c3e50;
         }
@@ -27,89 +27,96 @@
             color: white;
         }
 
-        /* --- ENVELOPE ANIMATION SECTION --- */
+        /* --- ENVELOPE ANIMATION SECTION (FULL SCREEN) --- */
         .envelope-wrapper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100vh;
             background-color: var(--dark-bg);
             display: flex; justify-content: center; align-items: center;
             z-index: 1000;
-            transition: opacity 1.5s ease-in-out, visibility 1.5s; 
+            transition: opacity 1s ease 1.5s; /* Fade out after opening */
         }
 
-        /* Make envelope HUGE as requested */
+        /* Make envelope HUGE - covers entire screen */
         .envelope-container {
             position: relative;
-            width: 90vw; /* 90% of screen width */
-            max-width: 1000px;
-            height: 60vh; /* 60% of screen height */
-            max-height: 700px;
+            width: 120vw; /* Wider than screen */
+            height: 120vh; /* Taller than screen */
             cursor: pointer;
-            perspective: 1500px;
+            perspective: 2000px;
+            display: flex; justify-content: center; align-items: center;
         }
 
         .envelope-body {
             position: absolute; bottom: 0; width: 100%; height: 100%;
             background: var(--envelope-color);
-            border-radius: 0 0 15px 15px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            box-shadow: 0 0 100px rgba(0,0,0,0.8);
             z-index: 10;
         }
 
+        /* Top Flap - Starts covering top half */
         .flap-top {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: var(--envelope-flap);
-            clip-path: polygon(0 0, 50% 100%, 100% 0);
+            /* Triangle pointing down to center */
+            clip-path: polygon(0 0, 100% 0, 50% 50%); 
             transform-origin: top;
-            transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.9s;
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.1s linear 0.75s;
             z-index: 20;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
 
+        /* Bottom Flap - Starts covering bottom half */
         .flap-bottom {
             position: absolute; bottom: 0; left: 0; width: 100%; height: 100%;
             background: var(--envelope-color);
-            clip-path: polygon(0 100%, 50% 0, 100% 100%);
+            /* Triangle pointing up to center */
+            clip-path: polygon(0 100%, 100% 100%, 50% 50%);
             z-index: 15;
-            transition: transform 1.8s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 1.5s cubic-bezier(0.4, 0, 0.2, 1);
             transform-origin: bottom;
         }
 
+        /* Side Flaps */
         .flap-left {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: #293042;
+            background: #524236;
             clip-path: polygon(0 0, 50% 50%, 0 100%);
             z-index: 12;
         }
         .flap-right {
             position: absolute; top: 0; right: 0; width: 100%; height: 100%;
-            background: #293042;
+            background: #524236;
             clip-path: polygon(100% 0, 50% 50%, 100% 100%);
             z-index: 12;
         }
 
-        /* Huge Wax Seal */
+        /* Wax Seal - Centered */
         .wax-seal {
-            width: 120px; height: 120px;
-            background: #f4f4f4;
+            width: 100px; height: 100px;
+            background: #e8e0d5;
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
             font-family: 'Great Vibes', cursive;
-            font-size: 48px; color: #aaa;
+            font-size: 36px; color: #888;
             position: relative; z-index: 30;
-            margin-top: 50px; /* Position on the flap */
             transition: transform 0.3s;
+            /* Position it exactly at the meeting point of flaps */
+            margin-top: -50px; /* Adjust based on flap geometry */
         }
         
-        .envelope-container:hover .wax-seal { transform: scale(1.05); }
+        .envelope-container:hover .wax-seal { transform: scale(1.1); }
 
         .open-text {
-            margin-top: 25px; font-size: 24px; color: #ccc;
+            position: absolute;
+            top: 35%; /* Position above the seal */
+            font-size: 20px; color: #ccc;
             text-align: center; line-height: 1.3; font-family: 'Cormorant Garamond', serif;
+            z-index: 31;
         }
-        .arrow { font-size: 30px; margin-bottom: 10px; animation: bounce 2s infinite; }
+        .arrow { font-size: 24px; margin-bottom: 5px; animation: bounce 2s infinite; display: block;}
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
@@ -119,11 +126,11 @@
 
         /* Animation States */
         .envelope-wrapper.opened .flap-top {
-            transform: rotateX(180deg);
+            transform: translateY(-100%); /* Move up off screen */
             z-index: 1;
         }
         .envelope-wrapper.opened .flap-bottom {
-            transform: rotateX(-180deg);
+            transform: translateY(100%); /* Move down off screen */
             z-index: 1;
         }
         
@@ -147,7 +154,8 @@
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(26,31,44,0.5), rgba(26,31,44,0.5)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            /* Replace with your couple photo URL */
+            background: linear-gradient(rgba(74,59,50,0.4), rgba(74,59,50,0.4)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; position: relative;
@@ -157,18 +165,18 @@
 
         .names {
             font-family: 'Great Vibes', cursive;
-            font-size: 7rem; color: var(--gold);
+            font-size: 7rem; color: white;
             text-shadow: 2px 2px 10px rgba(0,0,0,0.7);
             overflow: hidden;
             white-space: nowrap;
-            border-right: 3px solid var(--gold);
+            border-right: 3px solid white;
             width: 0;
             animation: typing 4s steps(30, end) forwards, blink-caret .75s step-end infinite;
             animation-delay: 1s; 
         }
 
         @keyframes typing { from { width: 0; } to { width: 100%; } }
-        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: var(--gold); } }
+        @keyframes blink-caret { from, to { border-color: transparent; } 50% { border-color: white; } }
 
         .date-hero {
             font-family: 'Cormorant Garamond', serif;
@@ -177,7 +185,7 @@
         }
 
         .scroll-down {
-            position: absolute; bottom: 30px; color: var(--gold);
+            position: absolute; bottom: 30px; color: white;
             font-size: 3rem; opacity: 0; animation: fadeIn 2s ease forwards, bounce 2s infinite; animation-delay: 5s;
         }
 
@@ -194,7 +202,7 @@
         .story-text { max-width: 900px; margin: 0 auto; font-size: 1.4rem; line-height: 1.8; color: #ddd; }
 
         /* Schedule Section */
-        .schedule-section { background-color: #151924; padding: 100px 20px; color: white; }
+        .schedule-section { background-color: #3e312a; padding: 100px 20px; color: white; }
         .timeline-item { display: flex; align-items: flex-start; margin-bottom: 80px; max-width: 900px; margin: 0 auto 80px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 50px; }
         .time-col { width: 200px; font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--gold); text-align: right; padding-right: 40px; flex-shrink: 0; }
         .details-col h3 { font-size: 2.5rem; margin-bottom: 15px; color: var(--gold); }
@@ -240,9 +248,8 @@
             .timer { gap: 20px; } .number { font-size: 3rem; }
             .timeline-item { flex-direction: column; }
             .time-col { text-align: left; margin-bottom: 15px; width: 100%; padding-right: 0; }
-            .envelope-container { width: 95vw; height: 50vh; }
-            .wax-seal { width: 80px; height: 80px; font-size: 32px; margin-top: 30px; }
-            .open-text { font-size: 16px; margin-top: 15px; }
+            .wax-seal { width: 80px; height: 80px; font-size: 28px; }
+            .open-text { font-size: 16px; top: 30%; }
         }
     </style>
 </head>
@@ -267,12 +274,18 @@
     <div class="envelope-wrapper" id="envelopeWrapper" onclick="openEnvelope()">
         <div class="envelope-container">
             <div class="flap-top">
-                <div class="wax-seal">hyoor</div>
-                <div class="open-text">
-                    <div class="arrow">↓</div>
-                    Բացել<br>այստեղ
-                </div>
+                <!-- Text is outside the flap in this design, or on the flap? 
+                     In video, text "Open here" is on the top flap area. -->
             </div>
+            
+            <!-- Text positioned absolutely over the center -->
+            <div class="open-text">
+                <span class="arrow">↓</span>
+                Բացել<br>այստեղ
+            </div>
+
+            <div class="wax-seal">hyoor</div>
+
             <div class="flap-left"></div>
             <div class="flap-right"></div>
             <div class="flap-bottom"></div>
@@ -286,7 +299,7 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="names-container">
-                <h1 class="names">Karine & Arsen</h1>
+                <h1 class="names">Mher & Lusine</h1>
             </div>
             <div class="date-hero">01.10.2026</div>
             <div class="scroll-down">⌄</div>
@@ -301,7 +314,7 @@
                 <div class="time-box"><span class="number" id="seconds">00</span><span class="label">Վայրկյան</span></div>
             </div>
             <p class="story-text">
-                Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարժան Ձեր ներկայությամբ։ 
+                Մենք սիրում ենք մեր համատեղ ճանապարհը և այն կրթունա առավել հիշարան Ձեր ներկայությամբ։ 
                 Մեծ սիրով հրավիրում ենք Ձեզ մեր երջանիկ օրվա մասնակիցը լինելու։
             </p>
         </section>
@@ -322,7 +335,7 @@
                     <h3>Պսակադրություն</h3>
                     <p>Սուրբ Աստվածածին եկեղեցի</p>
                     <p>21 Իսրայելյան փող.</p>
-                    <a href="#" class="map-btn">նչպես հասնել</a>
+                    <a href="#" class="map-btn">Ինչպես հասնել</a>
                 </div>
             </div>
             <div class="timeline-item">
@@ -338,7 +351,7 @@
         <!-- RSVP Section -->
         <section class="rsvp-section" id="rsvp">
             <h2>Խնդրում ենք հաստատել Ձեր ներկայությունը</h2>
-            <p style="margin-top: 15px; color: #666; font-size: 1.1rem;">պասում ենք Ձեր պատասխանին մինչև 22.09.26</p>
+            <p style="margin-top: 15px; color: #666; font-size: 1.1rem;">Սպասում ենք Ձեր պատասխանին մինչև 22.09.26</p>
             <form class="rsvp-form">
                 <div class="form-group">
                     <label>Կկարողանա՞ք ներկա գտնվել միջոցառմանը</label>
@@ -350,13 +363,13 @@
                 <div class="form-group">
                     <label>Ում կողմից եք հրավիրված</label>
                     <div class="checkbox-group">
-                        <label class="custom-checkbox"><input type="checkbox" name="side" value="bride"><span class="checkmark"></span>Արսենի</label>
-                        <label class="custom-checkbox"><input type="checkbox" name="side" value="groom"><span class="checkmark"></span>Կարինեի</label>
+                        <label class="custom-checkbox"><input type="checkbox" name="side" value="bride"><span class="checkmark"></span>Մհերի</label>
+                        <label class="custom-checkbox"><input type="checkbox" name="side" value="groom"><span class="checkmark"></span>Լուսինեի</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label>Անուն, Ազգանուն</label>
-                    <input type="text" placeholder="Գրեք Ձեր անունը" style="width: 100%; padding: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 1.1rem;">
+                    <input type="text" placeholder="Գրեք եր անունը" style="width: 100%; padding: 15px; border: 1px solid #ccc; border-radius: 5px; font-size: 1.1rem;">
                 </div>
                 <button type="button" class="submit-btn">Ուղարկել</button>
             </form>
@@ -374,7 +387,7 @@
         // 1. MUSIC SETUP
         // ---------------------------------------------------------
         // Փոխարինեք այս link-ը ձեր mp3 ֆայլի հղումով
-        const musicUrl = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'; 
+        const musicUrl = 'https://cdn.shopify.com/s/files/1/0765/3710/2528/files/Wedding_Music_-_Weddind_March_pesni.fm.mp3?v=1787006181'; 
         
         const bgMusic = new Audio(musicUrl);
         bgMusic.loop = true;
@@ -398,7 +411,7 @@
             // Trigger CSS animations for opening flaps
             wrapper.classList.add('opened');
 
-            // Wait for flaps to open (1.8s), then fade out the whole envelope
+            // Wait for flaps to move off screen (1.5s), then fade out the whole envelope
             setTimeout(() => {
                 wrapper.classList.add('hidden');
                 
@@ -409,7 +422,7 @@
                     navBtn.style.display = 'block';
                 }, 500); 
 
-            }, 1800);
+            }, 1500);
         }
 
         function toggleMusic() {
