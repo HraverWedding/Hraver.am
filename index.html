@@ -76,6 +76,37 @@
   }
   @keyframes pulse{0%,100%{opacity:.4}50%{opacity:.9}}
 
+  /* ---- wax seal open control ---- */
+  .env-open{
+    position:absolute; top:52%; left:50%; transform:translate(-50%,-50%);
+    display:flex; flex-direction:column; align-items:center; gap:.55rem;
+    z-index:3;
+  }
+  .env-arrow-hint{
+    font-family:var(--serif); font-style:italic; font-size:.95rem;
+    color:rgba(242,235,224,.65); text-align:center; line-height:1.3;
+  }
+  .env-arrow-hint svg{display:block; margin:.2rem auto 0; opacity:.6;}
+  .seal{
+    width:92px; height:92px; border-radius:50%;
+    background:radial-gradient(circle at 32% 28%, #fbf7ee, #ece2cc 55%, #d9c69b 100%);
+    box-shadow:0 10px 24px rgba(0,0,0,.35), inset 0 -6px 10px rgba(120,90,40,.25), inset 0 4px 8px rgba(255,255,255,.6);
+    display:flex; align-items:center; justify-content:center;
+    transition:transform .35s ease, box-shadow .35s ease;
+    position:relative;
+  }
+  .seal::before{
+    content:''; position:absolute; inset:-6px; border-radius:50%;
+    border:1px dashed rgba(201,162,95,.35);
+  }
+  .seal:hover{transform:scale(1.06);}
+  .seal-monogram{
+    font-family:var(--script); font-size:2rem; color:#7a6947; line-height:1;
+  }
+  #envelope.opening .seal{transform:scale(.2); opacity:0;}
+  #envelope.opening .env-arrow-hint{opacity:0; transition:opacity .3s ease;}
+  #envelope.opening .env-flap{transform:translateY(-14px); opacity:0;}
+
   /* ============ NAV ============ */
   header{
     position:fixed; top:0; left:0; right:0; z-index:100;
@@ -123,10 +154,21 @@
     text-shadow:0 0 40px rgba(201,162,95,.25);
   }
   .hero-date{
-    font-family:var(--serif); font-style:italic;
-    font-size:clamp(1.3rem,2.6vw,1.9rem);
-    letter-spacing:.08em; margin-top:1rem; color:var(--cream);
+    display:flex; align-items:center; gap:.9rem;
+    margin-top:1.6rem;
+    opacity:0; transform:translateY(10px);
+    animation:dateIn 1s ease .6s forwards;
   }
+  .hero-date .rule{width:34px; height:1px; background:var(--gold); opacity:.7;}
+  .hero-date .dt{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(.95rem,1.6vw,1.15rem);
+    letter-spacing:.32em; text-transform:uppercase; color:var(--gold-light);
+  }
+  .hero-date .place{
+    font-family:var(--serif); font-style:italic; font-size:1.05rem; color:rgba(242,235,224,.75);
+  }
+  @keyframes dateIn{to{opacity:1; transform:translateY(0);}}
   .scroll-cue{
     position:absolute; bottom:2.2rem; left:50%; transform:translateX(-50%);
     display:flex; flex-direction:column; align-items:center; gap:.4rem;
@@ -191,8 +233,15 @@
     content:''; position:absolute; right:-24px; top:8px; width:9px; height:9px;
     border-radius:50%; background:var(--navy); border:2px solid var(--gold);
   }
-  .t-title{font-family:var(--serif); font-style:italic; font-weight:500; font-size:1.35rem; margin-bottom:.35rem;}
-  .t-place{color:rgba(242,235,224,.65); font-size:.92rem; margin-bottom:.9rem;}
+  .t-head{display:flex; align-items:center; gap:.9rem; margin-bottom:.5rem;}
+  .t-icon{
+    width:44px; height:44px; flex:none; border-radius:50%;
+    border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    background:rgba(201,162,95,.06);
+  }
+  .t-icon svg{width:22px; height:22px;}
+  .t-title{font-family:var(--serif); font-style:italic; font-weight:500; font-size:1.35rem;}
+  .t-place{color:rgba(242,235,224,.65); font-size:.92rem; margin-bottom:.9rem; margin-left:calc(44px + .9rem);}
   .t-link{
     display:inline-flex; align-items:center; gap:.4rem;
     font-size:.75rem; letter-spacing:.06em; border:1px solid var(--line);
@@ -274,17 +323,24 @@
 
 <!-- ============ ENVELOPE INTRO ============ -->
 <div id="envelope">
+  <p class="env-title" data-i18n="env_title">Դուք հրավիրված եք<br>մեր հարսանիքին</p>
   <div class="env-graphic">
-    <svg viewBox="0 0 300 200" fill="none">
+    <svg class="env-flap" viewBox="0 0 300 200" fill="none" style="transition:transform .5s ease, opacity .5s ease;">
       <rect x="4" y="4" width="292" height="192" rx="4" stroke="#c9a25f" stroke-opacity=".55"/>
       <path d="M4 8 L150 120 L296 8" stroke="#c9a25f" stroke-opacity=".55"/>
       <path d="M4 192 L110 100" stroke="#c9a25f" stroke-opacity=".3"/>
       <path d="M296 192 L190 100" stroke="#c9a25f" stroke-opacity=".3"/>
     </svg>
+    <div class="env-open">
+      <div class="env-arrow-hint">
+        <span data-i18n="env_sub">Սեղմեք<br>այստեղ</span>
+        <svg width="34" height="30" viewBox="0 0 34 30" fill="none" stroke="#e2c793" stroke-width="1.3"><path d="M2 2c10 2 18 8 20 22M22 17l3 8-8-2"/></svg>
+      </div>
+      <button class="seal" id="seal-btn" aria-label="open">
+        <span class="seal-monogram">L&amp;H</span>
+      </button>
+    </div>
   </div>
-  <p class="env-title" data-i18n="env_title">Դուք հրավիրված եք<br>մեր հարսանիքին</p>
-  <p class="env-sub" data-i18n="env_sub">սեղմեք բացելու համար</p>
-  <p class="env-hint" data-i18n="env_hint">✦</p>
 </div>
 
 <!-- ============ HEADER / NAV ============ -->
@@ -316,7 +372,7 @@
   <div class="hero-content reveal in">
     <span class="hero-eyebrow" data-i18n="hero_eyebrow">Մենք ամուսնանում ենք</span>
     <h1 class="hero-names">Lilit &amp; Hayk</h1>
-    <p class="hero-date">10 . 10 . 2026 — Երևան</p>
+    <p class="hero-date"><span class="rule"></span><span class="dt">10 · 10 · 2026</span><span class="place">Երևան</span></p>
   </div>
   <a href="#countdown" class="scroll-cue" aria-label="scroll">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
@@ -347,7 +403,12 @@
     <div class="t-item reveal">
       <div class="t-time">11:00</div>
       <div>
-        <div class="t-title" data-i18n="sc1_title">Հարսի տուն</div>
+        <div class="t-head">
+          <div class="t-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#c9a25f" stroke-width="1.4"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>
+          </div>
+          <div class="t-title" data-i18n="sc1_title">Հարսի տուն</div>
+        </div>
         <div class="t-place">Կոմիտասի պող. 51, Երևան</div>
         <a class="t-link" target="_blank" href="https://maps.google.com/?q=Կոմիտասի+պող.+51+Երևան" data-i18n="sc_link">Ինչպես հասնել →</a>
       </div>
@@ -355,7 +416,12 @@
     <div class="t-item reveal">
       <div class="t-time">13:00</div>
       <div>
-        <div class="t-title" data-i18n="sc2_title">Պսակադրություն</div>
+        <div class="t-head">
+          <div class="t-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#c9a25f" stroke-width="1.4"><path d="M12 2v5"/><path d="M9.5 4.5h5"/><path d="M6 22V11l6-4 6 4v11"/><path d="M6 22h12"/><path d="M10 22v-5h4v5"/></svg>
+          </div>
+          <div class="t-title" data-i18n="sc2_title">Պսակադրություն</div>
+        </div>
         <div class="t-place" data-i18n="sc2_place">Սուրբ Սարգիս եկեղեցի, Իսրայելյան փող. 21</div>
         <a class="t-link" target="_blank" href="https://maps.google.com/?q=Սուրբ+Սարգիս+եկեղեցի+Երևան" data-i18n="sc_link">Ինչպես հասնել →</a>
       </div>
@@ -363,7 +429,12 @@
     <div class="t-item reveal">
       <div class="t-time">17:00</div>
       <div>
-        <div class="t-title" data-i18n="sc3_title">Հարսանեկան խնջույք</div>
+        <div class="t-head">
+          <div class="t-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#c9a25f" stroke-width="1.4"><path d="M8 2v8a2 2 0 002 2 2 2 0 002-2V2"/><path d="M10 12v10"/><path d="M17 2c-1.5 1.5-2 3-2 5s1 3.5 2 4v11"/></svg>
+          </div>
+          <div class="t-title" data-i18n="sc3_title">Հարսանեկան խնջույք</div>
+        </div>
         <div class="t-place" data-i18n="sc3_place">«[Ռեստորանի անուն]», Բարբյուսի փող. 64/2</div>
         <a class="t-link" target="_blank" href="https://maps.google.com/?q=Բարբյուսի+փող.+64" data-i18n="sc_link">Ինչպես հասնել →</a>
       </div>
@@ -505,8 +576,13 @@ document.querySelectorAll('.lang-switch button').forEach(b=>{
 
 /* ============ ENVELOPE ============ */
 const envelope = document.getElementById('envelope');
-function openEnvelope(){ envelope.classList.add('hide'); document.body.style.overflow='auto'; }
-envelope.addEventListener('click', openEnvelope);
+const sealBtn = document.getElementById('seal-btn');
+function openEnvelope(){
+  envelope.classList.add('opening');
+  document.body.style.overflow='auto';
+  setTimeout(()=> envelope.classList.add('hide'), 420);
+}
+sealBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openEnvelope(); });
 document.body.style.overflow='hidden';
 
 /* ============ HEADER SCROLL STATE ============ */
