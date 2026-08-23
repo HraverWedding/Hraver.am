@@ -49,38 +49,55 @@
   /* ============ ENVELOPE INTRO ============ */
   #envelope{
     position:fixed; inset:0; z-index:999;
-    background:linear-gradient(180deg,var(--navy) 0%, var(--navy-deep) 100%);
+    background:var(--navy-deep);
     display:flex; align-items:center; justify-content:center;
-    flex-direction:column; gap:2.2rem;
-    cursor:pointer;
-    transition:opacity .9s ease, visibility .9s ease;
+    cursor:default;
+    transition:visibility .9s ease;
+    overflow:hidden;
   }
-  #envelope.hide{opacity:0; visibility:hidden; pointer-events:none;}
-  .env-graphic{
-    position:relative; width:min(70vw,340px); aspect-ratio:1.5/1;
+  #envelope.hide{visibility:hidden; pointer-events:none;}
+
+  .flap{
+    position:absolute; left:0; width:100%; height:52%;
+    background:linear-gradient(180deg,#181f38 0%, #121732 100%);
+    transition:transform 1s cubic-bezier(.7,0,.3,1), opacity .9s ease .1s;
+    box-shadow:0 0 60px rgba(0,0,0,.4) inset;
   }
-  .env-graphic svg{width:100%;height:100%;display:block;}
+  .flap-top{
+    top:0; clip-path:polygon(0 0,100% 0,50% 100%);
+    transform-origin:top center;
+  }
+  .flap-bottom{
+    bottom:0; clip-path:polygon(0 100%,100% 100%,50% 0);
+    transform-origin:bottom center;
+  }
+  .flap-top::after, .flap-bottom::after{
+    content:''; position:absolute; left:0; right:0; height:1px;
+    background:linear-gradient(90deg, transparent, rgba(201,162,95,.4), transparent);
+  }
+  .flap-top::after{bottom:0;}
+  .flap-bottom::after{top:0;}
+
+  #envelope.opening .flap-top{transform:translateY(-100%); opacity:0;}
+  #envelope.opening .flap-bottom{transform:translateY(100%); opacity:0;}
+
+  .env-content{
+    position:relative; z-index:3;
+    display:flex; flex-direction:column; align-items:center; gap:2.2rem;
+    transition:opacity .5s ease, transform .5s ease;
+  }
+  #envelope.opening .env-content{opacity:0; transform:scale(.94);}
+
   .env-title{
     font-family:var(--serif); font-style:italic; font-weight:400;
     font-size:clamp(1.3rem,3.6vw,2rem);
     text-align:center; letter-spacing:.02em; color:var(--gold-light);
     padding:0 1.5rem; line-height:1.6;
   }
-  .env-sub{
-    font-family:var(--sans); font-size:.78rem; letter-spacing:.14em;
-    text-transform:uppercase; color:rgba(242,235,224,.5);
-  }
-  .env-hint{
-    font-size:.72rem; letter-spacing:.1em; color:rgba(242,235,224,.4);
-    animation:pulse 2.2s ease-in-out infinite;
-  }
-  @keyframes pulse{0%,100%{opacity:.4}50%{opacity:.9}}
 
   /* ---- wax seal open control ---- */
   .env-open{
-    position:absolute; top:52%; left:50%; transform:translate(-50%,-50%);
     display:flex; flex-direction:column; align-items:center; gap:.55rem;
-    z-index:3;
   }
   .env-arrow-hint{
     font-family:var(--serif); font-style:italic; font-size:.95rem;
@@ -93,7 +110,7 @@
     box-shadow:0 10px 24px rgba(0,0,0,.35), inset 0 -6px 10px rgba(120,90,40,.25), inset 0 4px 8px rgba(255,255,255,.6);
     display:flex; align-items:center; justify-content:center;
     transition:transform .35s ease, box-shadow .35s ease;
-    position:relative;
+    position:relative; cursor:pointer;
   }
   .seal::before{
     content:''; position:absolute; inset:-6px; border-radius:50%;
@@ -104,8 +121,6 @@
     font-family:var(--script); font-size:2rem; color:#7a6947; line-height:1;
   }
   #envelope.opening .seal{transform:scale(.2); opacity:0;}
-  #envelope.opening .env-arrow-hint{opacity:0; transition:opacity .3s ease;}
-  #envelope.opening .env-flap{transform:translateY(-14px); opacity:0;}
 
   /* ============ NAV ============ */
   header{
@@ -154,19 +169,25 @@
     text-shadow:0 0 40px rgba(201,162,95,.25);
   }
   .hero-date{
-    display:flex; align-items:center; gap:.9rem;
-    margin-top:1.6rem;
+    display:inline-flex; align-items:center; gap:.7rem;
+    margin-top:1.8rem;
+    padding:.6rem 1.4rem;
+    border:1px solid var(--line);
+    border-radius:2px;
     opacity:0; transform:translateY(10px);
     animation:dateIn 1s ease .6s forwards;
   }
-  .hero-date .rule{width:34px; height:1px; background:var(--gold); opacity:.7;}
+  .hero-date .diamond{
+    width:6px; height:6px; background:var(--gold); transform:rotate(45deg); flex:none;
+  }
   .hero-date .dt{
     font-family:var(--serif); font-weight:500;
-    font-size:clamp(.95rem,1.6vw,1.15rem);
-    letter-spacing:.32em; text-transform:uppercase; color:var(--gold-light);
+    font-size:clamp(.85rem,1.4vw,1rem);
+    letter-spacing:.34em; text-transform:uppercase; color:var(--gold-light);
   }
   .hero-date .place{
-    font-family:var(--serif); font-style:italic; font-size:1.05rem; color:rgba(242,235,224,.75);
+    font-family:var(--serif); font-style:italic; font-size:1rem; color:rgba(242,235,224,.65);
+    padding-left:.7rem; border-left:1px solid var(--line);
   }
   @keyframes dateIn{to{opacity:1; transform:translateY(0);}}
   .scroll-cue{
@@ -323,14 +344,10 @@
 
 <!-- ============ ENVELOPE INTRO ============ -->
 <div id="envelope">
-  <p class="env-title" data-i18n="env_title">Դուք հրավիրված եք<br>մեր հարսանիքին</p>
-  <div class="env-graphic">
-    <svg class="env-flap" viewBox="0 0 300 200" fill="none" style="transition:transform .5s ease, opacity .5s ease;">
-      <rect x="4" y="4" width="292" height="192" rx="4" stroke="#c9a25f" stroke-opacity=".55"/>
-      <path d="M4 8 L150 120 L296 8" stroke="#c9a25f" stroke-opacity=".55"/>
-      <path d="M4 192 L110 100" stroke="#c9a25f" stroke-opacity=".3"/>
-      <path d="M296 192 L190 100" stroke="#c9a25f" stroke-opacity=".3"/>
-    </svg>
+  <div class="flap flap-top"></div>
+  <div class="flap flap-bottom"></div>
+  <div class="env-content">
+    <p class="env-title" data-i18n="env_title">Դուք հրավիրված եք<br>մեր հարսանիքին</p>
     <div class="env-open">
       <div class="env-arrow-hint">
         <span data-i18n="env_sub">Սեղմեք<br>այստեղ</span>
@@ -367,12 +384,21 @@
         <path d="M760 60 C 800 120, 780 190, 800 240"/>
         <circle cx="780" cy="260" r="4" fill="#c9a25f" opacity=".7"/>
       </g>
+      <!-- interlocking rings motif -->
+      <g transform="translate(560,150)" opacity="0.45" fill="none" stroke="#e2c793" stroke-width="1.6">
+        <circle cx="60" cy="70" r="46"/>
+        <circle cx="104" cy="70" r="46"/>
+        <path d="M82 18 C 92 4, 108 -2, 124 4" stroke-linecap="round"/>
+        <path d="M124 4 C 130 10, 128 18, 122 20" stroke-linecap="round"/>
+        <circle cx="82" cy="18" r="2.2" fill="#e2c793" stroke="none"/>
+        <path d="M40 128 C 55 140, 75 142, 90 134" stroke-linecap="round" opacity=".7"/>
+      </g>
     </svg>
   </div>
   <div class="hero-content reveal in">
     <span class="hero-eyebrow" data-i18n="hero_eyebrow">Մենք ամուսնանում ենք</span>
     <h1 class="hero-names">Lilit &amp; Hayk</h1>
-    <p class="hero-date"><span class="rule"></span><span class="dt">10 · 10 · 2026</span><span class="place">Երևան</span></p>
+    <p class="hero-date"><span class="diamond"></span><span class="dt">10 · 10 · 2026</span><span class="place">Երևան</span></p>
   </div>
   <a href="#countdown" class="scroll-cue" aria-label="scroll">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
@@ -580,7 +606,7 @@ const sealBtn = document.getElementById('seal-btn');
 function openEnvelope(){
   envelope.classList.add('opening');
   document.body.style.overflow='auto';
-  setTimeout(()=> envelope.classList.add('hide'), 420);
+  setTimeout(()=> envelope.classList.add('hide'), 1050);
 }
 sealBtn.addEventListener('click', (e)=>{ e.stopPropagation(); openEnvelope(); });
 document.body.style.overflow='hidden';
