@@ -11,8 +11,8 @@
     <style>
         :root {
             --gold: #dfb15b;
-            --dark-bg: #2c1d18;
-            --card-bg: #3d2822;
+            --dark-bg: #111622;
+            --envelope-bg: #161c2d;
             --light-bg: #f9f6f0;
             --text-dark: #2c3e50;
         }
@@ -26,120 +26,119 @@
             color: white;
         }
 
-        /* --- REALISTIC CARD INTRO SECTION --- */
+        /* --- ENVELOPE INTRO SECTION --- */
         .intro-wrapper {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100vh;
-            background-color: rgba(30, 20, 16, 0.95);
+            background-color: #0b0e17;
             z-index: 1000;
             display: flex; justify-content: center; align-items: center;
             transition: opacity 0.8s ease 0.8s, visibility 0.8s ease 0.8s;
         }
 
-        /* The Card Container mimicking a physical invitation */
-        .invitation-card {
+        /* Envelope Box matching the design in the picture */
+        .envelope-container {
             position: relative;
-            width: 450px;
-            max-width: 90vw;
-            height: 650px;
-            max-height: 85vh;
-            background: var(--card-bg);
-            border: 2px solid var(--gold);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 20px rgba(0,0,0,0.5);
+            width: 750px;
+            max-width: 95vw;
+            height: 480px;
+            max-height: 90vh;
+            background-color: var(--envelope-bg);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
             cursor: pointer;
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
-        /* Top Half of the Card */
-        .card-half-top {
+        /* Top Half of the Envelope */
+        .envelope-half-top {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 50%;
-            background: linear-gradient(135deg, #48322a 0%, var(--card-bg) 100%);
-            border-bottom: 1px solid rgba(223, 177, 91, 0.4);
+            background: linear-gradient(180deg, #131826 0%, #161c2d 100%);
             z-index: 10;
             transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
             display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
-            padding-bottom: 15px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
         }
 
-        /* Bottom Half of the Card */
-        .card-half-bottom {
+        /* Bottom Half of the Envelope */
+        .envelope-half-bottom {
             position: absolute;
             bottom: 0; left: 0; width: 100%; height: 50%;
-            background: linear-gradient(315deg, #33201a 0%, var(--card-bg) 100%);
-            border-top: 1px solid rgba(223, 177, 91, 0.4);
+            background: linear-gradient(0deg, #131826 0%, #161c2d 100%);
             z-index: 10;
             transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
             display: flex; flex-direction: column; justify-content: flex-start; align-items: center;
-            padding-top: 15px;
+            padding-top: 25px;
         }
 
-        /* Center Seal connecting both halves */
-        .card-seal {
+        /* Center Wax Seal */
+        .envelope-seal {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            width: 100px; height: 100px;
-            background: radial-gradient(circle, #f9f0d9 0%, var(--gold) 70%, #9c7526 100%);
+            width: 90px; height: 90px;
+            background: radial-gradient(circle, #ffffff 0%, #e2e8f0 70%, #cbd5e1 100%);
             border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 30px rgba(223, 177, 91, 0.6), inset 0 2px 5px rgba(255,255,255,0.8);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.25), 0 10px 20px rgba(0,0,0,0.5);
             font-family: 'Great Vibes', cursive;
-            font-size: 38px; color: #2c1d18;
-            border: 3px double #fff;
+            color: #161c2d;
             z-index: 20;
             transition: transform 0.5s ease, opacity 0.5s ease;
-            animation: pulse-seal 2s infinite;
+            border: 2px solid #fff;
         }
 
-        @keyframes pulse-seal {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.08); }
-            100% { transform: translate(-50%, -50%) scale(1); }
+        .envelope-seal .seal-title {
+            font-size: 32px;
+            line-height: 1;
         }
 
-        .invitation-card:hover .card-seal {
-            transform: translate(-50%, -50%) scale(1.12);
-        }
-
-        .card-text-top {
+        .envelope-seal .seal-sub {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 22px; color: #f9f6f0;
-            letter-spacing: 2px;
+            font-size: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            color: #475569;
+            margin-top: 2px;
             text-align: center;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
         }
 
-        .card-text-bottom {
+        .envelope-container:hover .envelope-seal {
+            transform: translate(-50%, -50%) scale(1.08);
+        }
+
+        .env-text-top {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 18px; color: var(--gold);
-            letter-spacing: 3px;
+            font-size: 26px; color: #f1f5f9;
+            letter-spacing: 1px;
             text-align: center;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.8);
+            font-style: italic;
         }
 
-        .card-arrow {
-            font-size: 22px; color: var(--gold);
-            animation: bounce 1.5s infinite; display: block; margin-top: 5px;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
-            40% {transform: translateY(-6px);}
-            60% {transform: translateY(-3px);}
+        .env-text-bottom {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 17px; color: #94a3b8;
+            letter-spacing: 0.5px;
+            text-align: center;
+            line-height: 1.5;
+            font-style: italic;
+            max-width: 600px;
+            padding: 0 20px;
         }
 
         /* Opening Trigger States */
-        .intro-wrapper.opened .card-half-top {
+        .intro-wrapper.opened .envelope-half-top {
             transform: translateY(-100%);
         }
-        .intro-wrapper.opened .card-half-bottom {
+        .intro-wrapper.opened .envelope-half-bottom {
             transform: translateY(100%);
         }
-        .intro-wrapper.opened .card-seal {
-            transform: translate(-50%, -50%) scale(1.5);
+        .intro-wrapper.opened .envelope-seal {
+            transform: translate(-50%, -50%) scale(1.4);
             opacity: 0;
         }
         .intro-wrapper.hidden {
@@ -162,7 +161,7 @@
         /* Hero Section */
         .hero {
             height: 100vh;
-            background: linear-gradient(rgba(44,29,24,0.6), rgba(44,29,24,0.6)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background: linear-gradient(rgba(17,22,34,0.6), rgba(17,22,34,0.6)), url('https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
             background-size: cover; background-position: center;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center; position: relative;
@@ -197,6 +196,12 @@
             font-size: 3rem; opacity: 0; animation: fadeIn 2s ease forwards, bounce 2s infinite; animation-delay: 4.5s;
         }
 
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-8px);}
+            60% {transform: translateY(-4px);}
+        }
+
         @keyframes fadeIn { to { opacity: 1; } }
 
         /* Countdown Section */
@@ -210,7 +215,7 @@
         .story-text { max-width: 900px; margin: 0 auto; font-size: 1.4rem; line-height: 1.8; color: #ddd; }
 
         /* Schedule Section */
-        .schedule-section { background-color: #33201a; padding: 100px 20px; color: white; }
+        .schedule-section { background-color: #161c2d; padding: 100px 20px; color: white; }
         .timeline-item { display: flex; align-items: flex-start; margin-bottom: 80px; max-width: 900px; margin-left: auto; margin-right: auto; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 50px; }
         .time-col { width: 200px; font-family: 'Cormorant Garamond', serif; font-size: 3.5rem; color: var(--gold); text-align: right; padding-right: 40px; flex-shrink: 0; }
         .details-col h3 { font-size: 2.5rem; margin-bottom: 15px; color: var(--gold); }
@@ -246,7 +251,7 @@
             position: fixed; top: 30px; left: 50%; transform: translateX(-50%);
             width: 50px; height: 50px; border-radius: 50%; border: 1px solid var(--gold);
             display: none; justify-content: center; align-items: center;
-            z-index: 100; cursor: pointer; background: rgba(44,29,24,0.6);
+            z-index: 100; cursor: pointer; background: rgba(17,22,34,0.6);
         }
         .music-control svg { fill: var(--gold); width: 24px; height: 24px; }
 
@@ -256,8 +261,11 @@
             .timer { gap: 20px; } .number { font-size: 3rem; }
             .timeline-item { flex-direction: column; }
             .time-col { text-align: left; margin-bottom: 15px; width: 100%; padding-right: 0; }
-            .invitation-card { width: 90vw; height: 550px; }
-            .card-seal { width: 80px; height: 80px; font-size: 30px; }
+            .envelope-container { width: 95vw; height: 420px; }
+            .env-text-top { font-size: 20px; }
+            .env-text-bottom { font-size: 14px; }
+            .envelope-seal { width: 75px; height: 75px; }
+            .envelope-seal .seal-title { font-size: 26px; }
         }
     </style>
 </head>
@@ -278,26 +286,29 @@
 
     <a href="#rsvp" class="top-nav-btn" id="navBtn">Պատվիրել</a>
 
-    <!-- REALISTIC CARD INTRO ANIMATION -->
+    <!-- ENVELOPE INTRO ANIMATION -->
     <div class="intro-wrapper" id="introWrapper">
-        <div class="invitation-card" onclick="openCard()">
+        <div class="envelope-container" onclick="openEnvelope()">
             
-            <!-- Top Half of the Card -->
-            <div class="card-half-top">
-                <div class="card-text-top">
-                    Հարսանեկան Հրավեր<br>
-                    <span style="font-size: 15px; color: #dfb15b;">Մհեր & Լուսինե</span>
+            <!-- Top Half of the Envelope -->
+            <div class="envelope-half-top">
+                <div class="env-text-top">
+                    Դուք հրավիրված եք մեր հարսանիքին
                 </div>
             </div>
 
-            <!-- Center Seal -->
-            <div class="card-seal">HL</div>
+            <!-- Center Wax Seal matching the image -->
+            <div class="envelope-seal">
+                <span class="seal-title">hyoor</span>
+                <span class="seal-sub">Your Oasis, Our Priority</span>
+            </div>
 
-            <!-- Bottom Half of the Card -->
-            <div class="card-half-bottom">
-                <div class="card-text-bottom">
-                    <span class="card-arrow">↕</span>
-                    Սեղմեք՝ բացելու համար
+            <!-- Bottom Half of the Envelope -->
+            <div class="envelope-half-bottom">
+                <div class="env-text-bottom">
+                    Այս հրավերը Դուք պատահական չեք ստացել։<br>
+                    Մեծ համար հատկապես կարևոր է, որ այս յուրահատուկ օրը<br>
+                    մեր կողքին լինեն ամենամտերիմ մարդիկ։
                 </div>
             </div>
 
@@ -400,7 +411,7 @@
         bgMusic.loop = true;
         bgMusic.volume = 0.5;
 
-        function openCard() {
+        function openEnvelope() {
             const wrapper = document.getElementById('introWrapper');
             const mainContent = document.getElementById('mainContent');
             const langSwitch = document.getElementById('langSwitch');
@@ -415,7 +426,7 @@
             // Show music button
             musicBtn.style.display = 'flex';
 
-            // Trigger Split Animation on the card
+            // Trigger Split Animation on the envelope
             wrapper.classList.add('opened');
 
             // Show main content after animation finishes
@@ -441,7 +452,7 @@
 
         // Countdown Timer
         const weddingDate = new Date("October 1, 2026 11:00:00").getTime();
-        const timerInterval = setInterval(htmlTimer = function() {
+        const timerInterval = setInterval(function() {
             const now = new Date().getTime();
             const distance = weddingDate - now;
 
