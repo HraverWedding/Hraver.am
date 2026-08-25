@@ -52,10 +52,10 @@
   /* ============ ENVELOPE INTRO ============ */
   #envelope{
     position:fixed; inset:0; z-index:999;
-    background:var(--navy-deep);
+    background:transparent;
     display:flex; align-items:center; justify-content:center;
     cursor:default;
-    transition:visibility 1.4s ease;
+    transition:visibility 0s linear 3.7s;
     overflow:hidden;
   }
   #envelope.hide{visibility:hidden; pointer-events:none;}
@@ -87,17 +87,8 @@
   #envelope.opening .flap-top{transform:translateY(-100%); opacity:0;}
   #envelope.opening .flap-bottom{transform:translateY(100%); opacity:0;}
 
-  .env-photo{
-    position:absolute; inset:0; z-index:1;
-    background-size:cover; background-position:center;
-    opacity:0; transition:opacity 2.6s ease .5s, transform 4.2s ease;
-    transform:scale(1.08);
-  }
-  .env-photo::after{
-    content:''; position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(15,20,37,.72), rgba(15,20,37,.5) 45%, rgba(15,20,37,.88));
-  }
-  #envelope.opening .env-photo{opacity:1; transform:scale(1);}
+  /* No separate intro background: the envelope opens directly onto the real hero. */
+  .env-photo{display:none;}
 
   .env-content{
     position:relative; z-index:3;
@@ -219,8 +210,7 @@
     padding:.6rem 1.4rem;
     border:1px solid var(--line);
     border-radius:2px;
-    opacity:0; transform:translateY(10px);
-    animation:dateIn 1s ease .6s forwards;
+    opacity:1; transform:translateY(0);
   }
   .hero-date .diamond{
     width:6px; height:6px; background:var(--gold); transform:rotate(45deg); flex:none;
@@ -602,9 +592,9 @@
       </g>
     </svg>
   </div>
-  <div class="hero-content reveal in">
+  <div class="hero-content">
     <span class="hero-eyebrow" data-i18n="hero_eyebrow">Մենք ամուսնանում ենք</span>
-    <h1 class="hero-names">Lilit &amp; Hayk</h1>
+    <h1 class="hero-names">Anna &amp; Hayk</h1>
     <p class="hero-date"><span class="diamond"></span><span class="dt">10 · 10 · 2026</span><span class="place">Երևան</span></p>
   </div>
   <a href="#countdown" class="scroll-cue" aria-label="scroll">
@@ -932,11 +922,17 @@ const sealBtn = document.getElementById('seal-btn');
 const bgMusic = document.getElementById('bg-music');
 const musicToggle = document.getElementById('music-toggle');
 
+let envelopeOpened = false;
+
 function openEnvelope(){
+  if(envelopeOpened) return;
+  envelopeOpened = true;
+
+  // The flaps open over the real hero. Lilit & Hayk and the hero image are already underneath.
   envelope.classList.add('opening');
   document.body.style.overflow='auto';
-  // hide the overlay only once the slow flap animation has fully finished (matches the 3.6s CSS transition)
-  setTimeout(()=> envelope.classList.add('hide'), 3800);
+
+  setTimeout(()=> envelope.classList.add('hide'), 3700);
 
   if(bgMusic.querySelector('source').getAttribute('src')){
     bgMusic.volume = 0.55;
