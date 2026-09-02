@@ -289,10 +289,16 @@
   .lang-switch{display:flex; gap:.3rem; background:rgba(242,235,224,.1); border:1px solid var(--line); border-radius:999px; padding:.3rem; backdrop-filter:blur(6px);}
   .lang-switch button{
     width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    font-size:1.05rem; opacity:.55; transition:.25s; overflow:hidden;
+    opacity:.55; transition:.25s; overflow:hidden; position:relative;
   }
-  .lang-switch button .flag{display:block; line-height:1;}
-  .lang-switch button.active{opacity:1; background:rgba(201,162,95,.18); box-shadow:0 0 0 1px var(--gold);}
+  .lang-switch button .flag{
+    display:block; width:100%; height:100%; border-radius:50%;
+  }
+  .lang-switch button .flag img,
+  .lang-switch button .flag svg{
+    display:block; width:100%; height:100%; object-fit:cover; object-position:center;
+  }
+  .lang-switch button.active{opacity:1; box-shadow:0 0 0 2px var(--gold);}
   .music-toggle{
     position:fixed; top:1.3rem; left:50%; transform:translateX(-50%); z-index:90;
     width:42px; height:42px; border-radius:50%;
@@ -330,15 +336,34 @@
     position:absolute; inset:0;
     background-image:url('https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=1800&auto=format&fit=crop');
     background-size:cover; background-position:center 30%;
-    opacity:.5;
+    opacity:.92;
   }
   .hero-photo-tint{
     position:absolute; inset:0;
-    background:linear-gradient(180deg, rgba(15,20,37,.55) 0%, rgba(15,20,37,.35) 40%, rgba(15,20,37,.92) 100%),
-               radial-gradient(ellipse at 30% 20%, rgba(201,162,95,.10), transparent 55%);
+    background:linear-gradient(180deg, rgba(15,20,37,.05) 0%, rgba(15,20,37,.05) 38%, rgba(15,20,37,.55) 72%, rgba(15,20,37,.92) 100%),
+               radial-gradient(ellipse at 30% 20%, rgba(201,162,95,.06), transparent 55%);
   }
   .hero-bg svg{position:absolute; inset:0; width:100%; height:100%; opacity:.35;}
   .hero-content{position:relative; z-index:2; max-width:760px;}
+  .hero-content .hero-eyebrow,
+  .hero-content .hero-date{
+    opacity:0; transform:translateY(22px);
+    transition:opacity 1.3s cubic-bezier(.22,1,.36,1), transform 1.3s cubic-bezier(.22,1,.36,1);
+  }
+  .hero-content.in .hero-eyebrow{opacity:1; transform:translateY(0); transition-delay:.15s;}
+  .hero-content.in .hero-date{opacity:1; transform:translateY(0); transition-delay:1.55s;}
+  .hero-names .hn{
+    display:inline-block; opacity:0;
+    transition:opacity 1.15s cubic-bezier(.16,.9,.2,1.06), transform 1.15s cubic-bezier(.16,.9,.2,1.06), filter 1.15s ease;
+    filter:blur(6px);
+  }
+  .hero-names .hn-a{transform:translate(-30vw,10px) rotate(-4deg);}
+  .hero-names .hn-amp{transform:translate(0,-24vh) rotate(8deg); transform-origin:center bottom;}
+  .hero-names .hn-h{transform:translate(30vw,10px) rotate(4deg);}
+  .hero-content.in .hn{opacity:1; transform:translate(0,0) rotate(0deg); filter:blur(0);}
+  .hero-content.in .hn-a{transition-delay:.5s;}
+  .hero-content.in .hn-amp{transition-delay:.95s;}
+  .hero-content.in .hn-h{transition-delay:.75s;}
   .hero-eyebrow{
     font-size:.75rem; letter-spacing:.28em; text-transform:uppercase;
     color:rgba(242,235,224,.55); margin-bottom:1.1rem;
@@ -364,10 +389,6 @@
     font-family:var(--serif); font-weight:500;
     font-size:clamp(.85rem,1.4vw,1rem);
     letter-spacing:.34em; text-transform:uppercase; color:var(--gold-light);
-  }
-  .hero-date .place{
-    font-family:var(--serif); font-style:italic; font-size:1rem; color:rgba(242,235,224,.65);
-    padding-left:.7rem; border-left:1px solid var(--line);
   }
   @keyframes dateIn{to{opacity:1; transform:translateY(0);}}
   .scroll-cue{
@@ -694,9 +715,50 @@
 <!-- ============ HEADER / NAV ============ -->
 <header id="site-header">
   <div class="lang-switch">
-    <button data-lang="hy" class="active" aria-label="Հայերեն"><span class="flag">🇦🇲</span></button>
-    <button data-lang="en" aria-label="English"><span class="flag">🇬🇧</span></button>
-    <button data-lang="ru" aria-label="Русский"><span class="flag">🇷🇺</span></button>
+    <button data-lang="hy" class="active" aria-label="Հայերեն"><span class="flag">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <clipPath id="c-am"><circle cx="30" cy="30" r="30"/></clipPath>
+        <g clip-path="url(#c-am)">
+          <rect width="60" height="20" y="0" fill="#D90012"/>
+          <rect width="60" height="20" y="20" fill="#0033A0"/>
+          <rect width="60" height="20" y="40" fill="#F2A800"/>
+        </g>
+      </svg>
+    </span></button>
+    <button data-lang="en" aria-label="English"><span class="flag">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <clipPath id="c-gb"><circle cx="30" cy="30" r="30"/></clipPath>
+        <g clip-path="url(#c-gb)">
+          <rect x="-10" y="0" width="80" height="60" fill="#012169"/>
+          <g stroke="#FFFFFF" stroke-width="12">
+            <line x1="-10" y1="0" x2="70" y2="60"/>
+            <line x1="70" y1="0" x2="-10" y2="60"/>
+          </g>
+          <g stroke="#C8102E" stroke-width="4">
+            <line x1="-10" y1="0" x2="70" y2="60"/>
+            <line x1="70" y1="0" x2="-10" y2="60"/>
+          </g>
+          <g stroke="#FFFFFF" stroke-width="20">
+            <line x1="30" y1="0" x2="30" y2="60"/>
+            <line x1="-10" y1="30" x2="70" y2="30"/>
+          </g>
+          <g stroke="#C8102E" stroke-width="12">
+            <line x1="30" y1="0" x2="30" y2="60"/>
+            <line x1="-10" y1="30" x2="70" y2="30"/>
+          </g>
+        </g>
+      </svg>
+    </span></button>
+    <button data-lang="ru" aria-label="Русский"><span class="flag">
+      <svg viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+        <clipPath id="c-ru"><circle cx="30" cy="30" r="30"/></clipPath>
+        <g clip-path="url(#c-ru)">
+          <rect width="60" height="20" y="0" fill="#FFFFFF"/>
+          <rect width="60" height="20" y="20" fill="#0039A6"/>
+          <rect width="60" height="20" y="40" fill="#D52B1E"/>
+        </g>
+      </svg>
+    </span></button>
   </div>
   <button class="music-toggle" id="music-toggle" aria-label="music">
     <svg class="ic-play" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
@@ -739,10 +801,10 @@
       </g>
     </svg>
   </div>
-  <div class="hero-content">
+  <div class="hero-content" id="hero-content">
     <span class="hero-eyebrow" data-i18n="hero_eyebrow">Մենք ամուսնանում ենք</span>
-    <h1 class="hero-names">Anna &amp; Hayk</h1>
-    <p class="hero-date"><span class="diamond"></span><span class="dt">10 · 10 · 2026</span><span class="place">Երևան</span></p>
+    <h1 class="hero-names"><span class="hn hn-a">Anna</span> <span class="hn hn-amp">&amp;</span> <span class="hn hn-h">Hayk</span></h1>
+    <p class="hero-date"><span class="diamond"></span><span class="dt">10 · 10 · 2026</span></p>
   </div>
   <a href="#countdown" class="scroll-cue" aria-label="scroll">
     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 9l6 6 6-6"/></svg>
@@ -808,19 +870,19 @@
     <div class="film-band">
       <div class="film-track" id="film-track">
         <!-- set 1 -->
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1649289887707-4131abd76276?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
         <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1649289887707-4131abd76276?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
         <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
         <!-- set 2 (duplicate for seamless loop) -->
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1649289887707-4131abd76276?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
         <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1649289887707-4131abd76276?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop" alt=""></div>
         <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
-        <div class="film-frame"><img src="https://images.unsplash.com/photo-1606216794074-735e91aa2c92?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
+        <div class="film-frame"><img src="https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=700&auto=format&fit=crop&flip=h" alt=""></div>
       </div>
     </div>
   </div>
@@ -834,7 +896,7 @@
 <section id="slider">
   <div class="sl-viewport">
     <div class="sl-track" id="sl-track">
-      <div class="sl-slide active" style="background-image:url('https://images.unsplash.com/photo-1606216794074-735e91aa2c92?fm=jpg&q=70&w=1600&auto=format&fit=crop')"></div>
+      <div class="sl-slide active" style="background-image:url('https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=1600&auto=format&fit=crop')"></div>
       <div class="sl-slide" style="background-image:url('https://images.unsplash.com/photo-1761211488163-67bc659a8180?fm=jpg&q=70&w=1600&auto=format&fit=crop')"></div>
     </div>
     <div class="sl-tint"></div>
@@ -1078,6 +1140,10 @@ function openEnvelope(){
   // Direct cinematic envelope opening — no hand/ribbon animation.
   envelope.classList.add('opening');
   document.body.style.overflow='hidden';
+
+  // Reveal the hero text elegantly, timed with the envelope opening.
+  const heroContent = document.getElementById('hero-content');
+  setTimeout(()=>{ heroContent.classList.add('in'); }, 3200);
 
   // Let the slow 7.2s envelope opening finish before removing the intro.
   setTimeout(()=>{
