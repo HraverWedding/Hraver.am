@@ -665,6 +665,24 @@
   .rsvp-success.show{display:block;}
   .rsvp-success svg{margin-bottom:1rem;}
 
+  /* ---- animated guest-count field ---- */
+  #guests-group{
+    display:grid;
+    grid-template-rows:0fr;
+    opacity:0;
+    margin-bottom:0;
+    transition:grid-template-rows .55s cubic-bezier(.22,1,.36,1),
+               opacity .45s ease,
+               margin-bottom .55s cubic-bezier(.22,1,.36,1);
+  }
+  #guests-group.open{
+    grid-template-rows:1fr;
+    opacity:1;
+    margin-bottom:1.6rem;
+  }
+  #guests-group > div{overflow:hidden; min-height:0;}
+  #guests-group .field-inner{padding-top:.1rem;}
+
   /* ============ OUTRO ============ */
   #outro{
     background:var(--cream); color:var(--ink); text-align:center;
@@ -999,9 +1017,13 @@
         <input class="text-input" type="text" name="name" placeholder="Գրեք Ձեր անունը" required>
       </div>
 
-      <div class="field-group">
-        <label class="field-label" data-i18n="rsvp_guests">Քանի՞ հոգով կգաք</label>
-        <input class="text-input" type="number" name="guests" min="1" max="10" value="1">
+      <div class="field-group" id="guests-group">
+        <div>
+          <div class="field-inner">
+            <label class="field-label" data-i18n="rsvp_guests">Քանի՞ հոգով կգաք</label>
+            <input class="text-input" type="number" name="guests" min="1" max="10" value="1">
+          </div>
+        </div>
       </div>
 
       <button type="submit" class="submit-btn" data-i18n="rsvp_submit">Ուղարկել</button>
@@ -1152,7 +1174,7 @@ function openEnvelope(){
   }, 7800);
 
   if(bgMusic.querySelector('source').getAttribute('src')){
-    bgMusic.volume = 0.55;
+    bgMusic.volume = 1.2;
     bgMusic.play().then(()=>{
       musicToggle.classList.add('playing');
     }).catch(()=>{ /* browser blocked autoplay — user can press the button */ });
@@ -1221,6 +1243,20 @@ function tickCountdown(){
 }
 tickCountdown();
 setInterval(tickCountdown, 1000);
+
+/* ============ RSVP: show/hide guest count based on attendance ============ */
+const guestsGroup = document.getElementById('guests-group');
+const guestsInput = guestsGroup.querySelector('input[name="guests"]');
+document.querySelectorAll('input[name="attending"]').forEach(radio=>{
+  radio.addEventListener('change', ()=>{
+    if(radio.value === 'yes' && radio.checked){
+      guestsGroup.classList.add('open');
+    } else if(radio.value === 'no' && radio.checked){
+      guestsGroup.classList.remove('open');
+      guestsInput.value = 1;
+    }
+  });
+});
 
 /* ============ RSVP FORM ============ */
 // EDIT ME: replace YOUR_FORM_ID with a Formspree (or similar) endpoint to receive real submissions.
