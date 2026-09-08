@@ -1174,7 +1174,7 @@ function openEnvelope(){
   }, 7800);
 
   if(bgMusic.querySelector('source').getAttribute('src')){
-    bgMusic.volume = 1.2;
+    bgMusic.volume = 0.55;
     bgMusic.play().then(()=>{
       musicToggle.classList.add('playing');
     }).catch(()=>{ /* browser blocked autoplay — user can press the button */ });
