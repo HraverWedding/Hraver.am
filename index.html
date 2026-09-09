@@ -1004,7 +1004,7 @@
           </div>
           <div class="t-title" data-i18n="sc1_title">Հարսի տուն</div>
         </div>
-        <div class="t-place">Կոմիտասի պող. 51, Երևան</div>
+        <div class="t-place" data-i18n="sc1_place">Կոմիտասի պող. 51, Երևան</div>
         <a class="t-link" target="_blank" href="https://maps.google.com/?q=Կոմիտասի+պող.+51+Երևան" data-i18n="sc_link">Ինչպես հասնել →</a>
       </div>
     </div>
@@ -1080,7 +1080,7 @@
 
       <div class="field-group">
         <label class="field-label" data-i18n="rsvp_name">Անուն, Ազգանուն</label>
-        <input class="text-input" type="text" name="name" placeholder="Գրեք Ձեր անունը" required>
+        <input class="text-input" type="text" name="name" placeholder="Գրեք Ձեր անունը" data-i18n-placeholder="rsvp_name_placeholder" required>
       </div>
 
       <div class="field-group" id="guests-group">
@@ -1146,6 +1146,7 @@ const translations = {
     sc_eyebrow:"The day's schedule",
     sc_title:"Timeline",
     sc1_title:"Bride's house",
+    sc1_place:"51 Komitas Ave, Yerevan",
     sc2_title:"Ceremony",
     sc2_place:"St. Sargis Church, 21 Israelyan St.",
     sc3_title:"Wedding banquet",
@@ -1164,6 +1165,7 @@ const translations = {
     rsvp_q2:"Which side are you invited from?",
     rsvp_side1:"Hayk's", rsvp_side2:"Lilit's",
     rsvp_name:"Full name",
+    rsvp_name_placeholder:"Write your name",
     rsvp_guests:"Number of guests",
     rsvp_submit:"Send",
     rsvp_hint:"Please answer the questions above",
@@ -1188,6 +1190,7 @@ const translations = {
     sc_eyebrow:"Программа дня",
     sc_title:"Расписание",
     sc1_title:"Дом невесты",
+    sc1_place:"просп. Комитаса 51, Ереван",
     sc2_title:"Венчание",
     sc2_place:"Церковь Сурб Саргис, ул. Исраелян 21",
     sc3_title:"Свадебный банкет",
@@ -1206,6 +1209,7 @@ const translations = {
     rsvp_q2:"С какой стороны вы приглашены?",
     rsvp_side1:"Со стороны Айка", rsvp_side2:"Со стороны Лилит",
     rsvp_name:"Имя, фамилия",
+    rsvp_name_placeholder:"Напишите ваше имя",
     rsvp_guests:"Сколько гостей придёт",
     rsvp_submit:"Отправить",
     rsvp_hint:"Пожалуйста, ответьте на вопросы выше",
@@ -1227,6 +1231,16 @@ function setLang(lang){
     } else if(translations[lang] && translations[lang][key]){
       if(!el.dataset.hyCache) el.dataset.hyCache = el.innerHTML;
       el.innerHTML = translations[lang][key];
+    }
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+    const key = el.getAttribute('data-i18n-placeholder');
+    if(lang==='hy'){
+      if(!el.dataset.hyPlaceholderCache) el.dataset.hyPlaceholderCache = el.placeholder;
+      el.placeholder = el.dataset.hyPlaceholderCache;
+    } else if(translations[lang] && translations[lang][key]){
+      if(!el.dataset.hyPlaceholderCache) el.dataset.hyPlaceholderCache = el.placeholder;
+      el.placeholder = translations[lang][key];
     }
   });
   document.querySelectorAll('.lang-switch button').forEach(b=>b.classList.toggle('active', b.dataset.lang===lang));
@@ -1386,7 +1400,7 @@ validateRsvpForm();
 /* ============ RSVP FORM ============ */
 // EDIT ME: replace YOUR_FORM_ID with a Formspree (or similar) endpoint to receive real submissions.
 // See README.md for step-by-step instructions.
-const RSVP_ENDPOINT = "https://formspree.io/f/xaeylaqg"; // e.g. "https://formspree.io/f/YOUR_FORM_ID"
+const RSVP_ENDPOINT = ""; // e.g. "https://formspree.io/f/YOUR_FORM_ID"
 
 function fireConfetti(){
   const wrap = document.getElementById('confetti-burst');
