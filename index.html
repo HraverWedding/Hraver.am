@@ -557,6 +557,86 @@
     .fs-strip-wrap{transform:rotate(-3deg);}
   }
 
+  /* ============ TOGETHER COUNTER ============ */
+  #together{
+    background:var(--navy-deep);
+    text-align:center;
+    overflow:hidden;
+  }
+  .tg-wrap{
+    max-width:680px; margin:0 auto;
+    display:flex; flex-direction:column; align-items:center; gap:1.4rem;
+  }
+  .tg-button{
+    position:relative;
+    display:flex; flex-direction:column; align-items:center; gap:.4rem;
+    padding:clamp(1.6rem,5vw,2.6rem) clamp(2.2rem,7vw,4rem);
+    border-radius:20px;
+    border:1px solid var(--line);
+    background:rgba(201,162,95,.04);
+    transition:box-shadow 1.4s ease, border-color 1.4s ease, background 1.4s ease;
+  }
+  .tg-button.lit{
+    border-color:var(--gold);
+    background:rgba(201,162,95,.09);
+    box-shadow:0 0 60px rgba(201,162,95,.35), 0 0 120px rgba(201,162,95,.12), inset 0 0 30px rgba(201,162,95,.12);
+    animation:tgGlowPulse 3.4s ease-in-out .6s infinite;
+  }
+  @keyframes tgGlowPulse{
+    0%,100%{box-shadow:0 0 60px rgba(201,162,95,.35), 0 0 120px rgba(201,162,95,.12), inset 0 0 30px rgba(201,162,95,.12);}
+    50%{box-shadow:0 0 90px rgba(201,162,95,.55), 0 0 160px rgba(201,162,95,.2), inset 0 0 40px rgba(201,162,95,.2);}
+  }
+  .tg-digits{
+    display:flex; justify-content:center;
+    font-family:var(--serif); font-weight:600;
+    font-size:clamp(3rem,10vw,5.6rem);
+    color:var(--gold-light);
+    line-height:1;
+    text-shadow:0 0 30px rgba(201,162,95,.35);
+    font-variant-numeric:tabular-nums;
+    min-height:1.1em;
+  }
+  .tg-digit{
+    display:inline-block;
+    position:relative;
+    --dx:0px; --dy:0px;
+  }
+  .tg-digit.tg-fly{
+    animation:tgDigitOut 1.9s cubic-bezier(.61,.02,.35,1) forwards;
+  }
+  @keyframes tgDigitOut{
+    0%{transform:translate(0,0) rotate(0deg) scale(1); opacity:1;}
+    38%{transform:translate(var(--dx),var(--dy)) rotate(160deg) scale(.92); opacity:1;}
+    72%{transform:translate(calc(var(--dx)*.25),calc(var(--dy)*.25)) rotate(620deg) scale(.4); opacity:.55;}
+    100%{transform:translate(0,0) rotate(900deg) scale(0); opacity:0;}
+  }
+  .tg-unit{
+    font-family:var(--script); font-size:clamp(1.4rem,3.4vw,2rem); color:rgba(242,235,224,.65);
+  }
+  .tg-caption{
+    font-family:var(--serif); font-style:italic; font-size:1.02rem;
+    color:rgba(242,235,224,.6); max-width:460px; line-height:1.7;
+  }
+  .tg-heart-wrap{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none; opacity:0;
+  }
+  .tg-heart-wrap.show{
+    animation:tgHeartIn 1.3s cubic-bezier(.34,1.56,.4,1) forwards;
+  }
+  .tg-heart-wrap svg{width:64px; height:58px;}
+  @keyframes tgHeartIn{
+    0%{opacity:0; transform:scale(.2) rotate(-25deg);}
+    55%{opacity:1; transform:scale(1.18) rotate(6deg);}
+    75%{transform:scale(.95) rotate(-3deg);}
+    100%{opacity:1; transform:scale(1) rotate(0deg);}
+  }
+  .tg-hint{
+    font-size:.72rem; letter-spacing:.1em; color:rgba(242,235,224,.4);
+    margin-top:.2rem;
+  }
+
   /* ============ SLIDER (video-like autoplay) ============ */
   #slider{position:relative;}
   .sl-viewport{position:relative; width:100%; height:clamp(320px,58vw,620px); overflow:hidden;}
@@ -976,6 +1056,24 @@
   </div>
 </section>
 
+<!-- ============ TOGETHER COUNTER ============ -->
+<section id="together" class="section-pad">
+  <div class="section-head reveal">
+    <span class="eyebrow" data-i18n="tg_eyebrow">Մեր սերը՝ թվերով</span>
+  </div>
+  <div class="tg-wrap">
+    <button class="tg-button reveal" id="tg-button" type="button" aria-label="days together">
+      <span class="tg-digits" id="tg-digits"></span>
+      <span class="tg-unit" id="tg-unit" data-i18n="tg_unit">օր միասին</span>
+      <div class="tg-heart-wrap" id="tg-heart-wrap">
+        <svg viewBox="0 0 100 90" fill="none" stroke="#c9a25f" stroke-width="5"><path d="M50 82C20 60 5 42 5 24 5 8 18 2 30 2c9 0 16 5 20 13 4-8 11-13 20-13 12 0 25 6 25 22 0 18-15 36-45 58z"/></svg>
+      </div>
+    </button>
+    <p class="tg-caption" data-i18n="tg_caption">Յուրաքանչյուր ժամը մեզ բերեց այս օրվան</p>
+    <p class="tg-hint" data-i18n="tg_hint">հպվեք թվին</p>
+  </div>
+</section>
+
 <!-- ============ SLIDER (auto-playing, video-like) ============ -->
 <section id="slider">
   <div class="sl-viewport">
@@ -1143,6 +1241,10 @@ const translations = {
     cd_won:"And love won...",
     gal_eyebrow:"Our story",
     gal_footer:"Just Love",
+    tg_eyebrow:"Our love in numbers",
+    tg_unit:"days together",
+    tg_caption:"Every hour brought us to this day",
+    tg_hint:"tap the number",
     sc_eyebrow:"The day's schedule",
     sc_title:"Timeline",
     sc1_title:"Bride's house",
@@ -1187,6 +1289,10 @@ const translations = {
     cd_won:"И любовь победила...",
     gal_eyebrow:"Наша история",
     gal_footer:"Только любовь",
+    tg_eyebrow:"Наша любовь в цифрах",
+    tg_unit:"дней вместе",
+    tg_caption:"Каждый час привёл нас к этому дню",
+    tg_hint:"нажмите на число",
     sc_eyebrow:"Программа дня",
     sc_title:"Расписание",
     sc1_title:"Дом невесты",
@@ -1315,6 +1421,73 @@ function goToSlide(i){
   dots[slIndex].classList.add('active');
 }
 setInterval(()=> goToSlide((slIndex+1) % slides.length), 4200);
+
+/* ============ TOGETHER COUNTER ============ */
+// EDIT ME: set the date the two of you got together
+const TOGETHER_SINCE = new Date('2019-06-15T00:00:00');
+
+const tgDigitsEl = document.getElementById('tg-digits');
+const tgButton = document.getElementById('tg-button');
+const tgHeartWrap = document.getElementById('tg-heart-wrap');
+
+function daysTogether(){
+  const diff = Date.now() - TOGETHER_SINCE.getTime();
+  return Math.max(0, Math.floor(diff / (1000*60*60*24)));
+}
+
+function renderTgDigits(){
+  const num = String(daysTogether());
+  tgDigitsEl.innerHTML = '';
+  num.split('').forEach(ch=>{
+    const span = document.createElement('span');
+    span.className = 'tg-digit';
+    span.textContent = ch;
+    tgDigitsEl.appendChild(span);
+  });
+}
+renderTgDigits();
+
+// direction order per digit position: up, right, left, down (repeats for longer numbers)
+const TG_DIRECTIONS = [
+  {dx:'0px',   dy:'-90px'},
+  {dx:'90px',  dy:'0px'},
+  {dx:'-90px', dy:'0px'},
+  {dx:'0px',   dy:'90px'}
+];
+
+let tgAnimating = false;
+tgButton.addEventListener('click', ()=>{
+  if(tgAnimating) return;
+  tgAnimating = true;
+
+  const digitEls = tgDigitsEl.querySelectorAll('.tg-digit');
+  digitEls.forEach((el,i)=>{
+    const dir = TG_DIRECTIONS[i % TG_DIRECTIONS.length];
+    el.style.setProperty('--dx', dir.dx);
+    el.style.setProperty('--dy', dir.dy);
+    el.classList.add('tg-fly');
+  });
+
+  setTimeout(()=>{
+    tgHeartWrap.classList.add('show');
+  }, 1500);
+
+  setTimeout(()=>{
+    tgHeartWrap.classList.remove('show');
+    renderTgDigits();
+    tgAnimating = false;
+  }, 3100);
+});
+
+// gentle glow-on when the section is scrolled slowly into view
+const tgObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      setTimeout(()=> tgButton.classList.add('lit'), 400);
+    }
+  });
+}, {threshold:.45});
+tgObserver.observe(tgButton);
 
 /* ============ HEADER SCROLL STATE ============ */
 const header = document.getElementById('site-header');
