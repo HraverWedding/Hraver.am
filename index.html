@@ -1573,7 +1573,7 @@ validateRsvpForm();
 /* ============ RSVP FORM ============ */
 // EDIT ME: replace YOUR_FORM_ID with a Formspree (or similar) endpoint to receive real submissions.
 // See README.md for step-by-step instructions.
-const RSVP_ENDPOINT = ""; // e.g. "https://formspree.io/f/YOUR_FORM_ID"
+const RSVP_ENDPOINT = "https://api.web3forms.com/submit"; // e.g. "https://formspree.io/f/YOUR_FORM_ID"
 
 function fireConfetti(){
   const wrap = document.getElementById('confetti-burst');
@@ -1603,6 +1603,7 @@ document.getElementById('rsvp-form').addEventListener('submit', async function(e
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
+  data.append('access_key', 'cdcaaadc-c4eb-4cf9-9bc7-5ffa380e5da0');
   const attending = data.get('attending');
 
   if(RSVP_ENDPOINT){
