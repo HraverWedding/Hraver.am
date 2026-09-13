@@ -1642,7 +1642,7 @@ document.getElementById('rsvp-form').addEventListener('submit', async function(e
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
-  data.append('access_key', 'cdcaaadc-c4eb-4cf9-9bc7-5ffa380e5da0');
+  data.append('access_key', 'cdcaaadc-c4eb-4cf9-9bc7-5ffa380e5da0$');
   const attending = data.get('attending');
 
   if(RSVP_ENDPOINT){
