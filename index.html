@@ -6,13 +6,6 @@
 <title>Արտավազդ &amp; Ստելլա | Հարսանիք 10.10.2026</title>
 <link rel="icon" type="image/png" href="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/dance.png?v=1789340347">
 
-<!--
-  ═══════════════════════════════════════════════════════════════════
-  ինչպես հարմարեցնել (HOW TO CUSTOMIZE) — կարդա՛ README.md ֆայլը
-  Փնտրիր «EDIT ME» նշումները՝ քո տվյալները տեղադրելու համար
-  ═══════════════════════════════════════════════════════════════════
--->
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Armenian:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Noto+Sans+Armenian:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,500&family=Tangerine:wght@400;700&display=swap" rel="stylesheet">
@@ -61,8 +54,6 @@
   }
   #envelope.hide{visibility:hidden; pointer-events:none;}
 
-
-  /* Full sealed-envelope backing: the real invitation is completely hidden at first. */
   #envelope::before{
     content:'';
     position:absolute;
@@ -80,11 +71,6 @@
     opacity:0;
   }
 
-  /* =========================
-     LUXURY ENVELOPE — ALL 4 FLAPS
-     The side flaps hide the real page completely,
-     so the intro starts as a sealed envelope.
-  ========================= */
   .flap{
     position:absolute;
     z-index:1;
@@ -98,7 +84,6 @@
       opacity 5.2s ease 1.6s;
   }
 
-  /* Top and bottom folds */
   .flap-top{
     left:0; top:0; width:100%; height:52%;
     clip-path:polygon(0 0,100% 0,50% 100%);
@@ -113,8 +98,6 @@
     z-index:2;
   }
 
-  /* New left and right folds:
-     these remove the visible page at the sides */
   .flap-left{
     left:0; top:0; width:52%; height:100%;
     clip-path:polygon(0 0,50% 50%,0 100%);
@@ -133,7 +116,6 @@
       linear-gradient(270deg,#221f0b 0%,#312d11 55%,#3a3518 100%);
   }
 
-  /* Elegant fold seams */
   .flap-top::after,
   .flap-bottom::after,
   .flap-left::after,
@@ -171,8 +153,6 @@
   .flap-left::after{right:0;}
   .flap-right::after{left:0;}
 
-  /* Open like a real luxury envelope:
-     top/bottom first reveal the center, sides slide outward slowly */
   #envelope.opening .flap-top{
     transform:translateY(-100%);
     opacity:0;
@@ -198,14 +178,12 @@
     transition-delay:.35s;
   }
 
-  /* The four folds meet cleanly at the center before opening. */
   .flap-top,
   .flap-bottom,
   .flap-left,
   .flap-right{
     will-change:transform, opacity;
   }
-/* No separate intro background: the envelope opens directly onto the real hero. */
   .env-photo{display:none;}
 
   .env-content{
@@ -222,7 +200,6 @@
     padding:0 1.5rem; line-height:1.6;
   }
 
-  /* ---- wax seal open control ---- */
   .env-open{
     display:flex; flex-direction:column; align-items:center; gap:.55rem;
   }
@@ -251,7 +228,6 @@
   #envelope.opening .seal{filter:blur(7px); opacity:0; transform:scale(1.10); transition-delay:.15s;}
   #envelope.opening .env-arrow-hint{opacity:0;}
 
-  /* Slow cinematic light bloom during the opening */
   #envelope::after{
     content:'';
     position:absolute;
@@ -286,11 +262,13 @@
     padding:1.4rem clamp(1.2rem,4vw,3rem);
     transition:background .4s ease, backdrop-filter .4s ease, padding .4s ease;
   }
-  header.scrolled{background:rgba(37,34,15,.82); backdrop-filter:blur(10px); padding:.9rem clamp(1.2rem,4vw,3rem);}
-  .lang-switch{display:flex; gap:.3rem; background:rgba(242,235,224,.1); border:1px solid var(--line); border-radius:999px; padding:.3rem; backdrop-filter:blur(6px);}
+  header.scrolled{padding:.9rem clamp(1.2rem,4vw,3rem);}
+  .lang-switch{display:flex; gap:.55rem; border-radius:999px; padding:.3rem;}
   .lang-switch button{
-    width:30px; height:30px; border-radius:50%; display:flex; align-items:center; justify-content:center;
-    opacity:.55; transition:.25s; overflow:hidden; position:relative;
+    width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    opacity:1; transition:.25s; overflow:hidden; position:relative;
+    border:2px solid rgba(242,235,224,.55);
+    box-shadow:0 2px 8px rgba(0,0,0,.25);
   }
   .lang-switch button .flag{
     display:block; width:100%; height:100%; border-radius:50%;
@@ -299,17 +277,18 @@
   .lang-switch button .flag svg{
     display:block; width:100%; height:100%; object-fit:cover; object-position:center;
   }
-  .lang-switch button.active{opacity:1; box-shadow:0 0 0 2px var(--gold);}
+  .lang-switch button.active{border-color:var(--gold);}
   .music-toggle{
     position:relative; z-index:90; flex:none;
     width:42px; height:42px; border-radius:50%;
-    background:rgba(37,34,15,.55); border:1px solid var(--line);
-    display:flex; align-items:center; justify-content:center; color:var(--gold-light);
-    backdrop-filter:blur(8px); transition:opacity .8s ease, background .3s;
+    display:flex; align-items:center; justify-content:center; color:#f2ebe0;
+    background:rgba(90,92,74,.92);
+    border:2px solid rgba(242,235,224,.35);
+    box-shadow:0 2px 10px rgba(0,0,0,.3);
+    transition:opacity .8s ease, background .3s;
     opacity:0; pointer-events:none;
   }
   .music-toggle.show{opacity:1; pointer-events:auto;}
-  .music-toggle:hover{background:rgba(172,180,116,.25);}
   .music-toggle .ic-pause{display:none;}
   .music-toggle.playing .ic-play{display:none;}
   .music-toggle.playing .ic-pause{display:block;}
@@ -785,7 +764,6 @@
   .rsvp-success.show{display:block;}
   .rsvp-success svg{margin-bottom:1rem;}
 
-  /* ---- celebratory effect (attending: yes) ---- */
   .confetti-burst{position:absolute; inset:-20px -20px auto -20px; height:220px; pointer-events:none; z-index:0;}
   .confetti-piece{
     position:absolute; top:-16px; width:9px; height:14px; opacity:.95;
@@ -807,7 +785,6 @@
   }
   .rsvp-success-yes .rsvp-success-title{color:var(--wine);}
 
-  /* ---- somber effect (attending: no) ---- */
   .rsvp-success-no{filter:grayscale(.35);}
   .success-emoji{
     font-size:2.8rem; line-height:1; display:inline-block;
@@ -824,7 +801,6 @@
     font-family:var(--serif); font-style:italic; color:rgba(36,34,24,.5); font-size:.95rem; margin-top:.5rem;
   }
 
-  /* ---- animated guest-count field ---- */
   #guests-group{
     display:grid;
     grid-template-rows:0fr;
@@ -869,8 +845,6 @@
 <body>
 
 <script>
-  /* Always start fresh from the top on refresh, even if the browser
-     tried to restore scroll position or jump to a #hash (e.g. #rsvp). */
   if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
   if (location.hash) { history.replaceState(null, '', location.pathname + location.search); }
   window.scrollTo(0, 0);
@@ -974,7 +948,6 @@
         <path d="M760 60 C 800 120, 780 190, 800 240"/>
         <circle cx="780" cy="260" r="4" fill="#acb474" opacity=".7"/>
       </g>
-      <!-- interlocking rings motif -->
       <g transform="translate(560,150)" opacity="0.45" fill="none" stroke="#cacfa6" stroke-width="1.6">
         <circle cx="60" cy="70" r="46"/>
         <circle cx="104" cy="70" r="46"/>
@@ -1052,12 +1025,10 @@
   <div class="fs-strip-wrap">
     <div class="film-band">
       <div class="film-track" id="film-track">
-        <!-- set 1 -->
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/Wedding_ImG.jpg?v=1789157461" alt=""></div>
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/fpjspg8fs88fs.jpg?v=1789157460" alt=""></div>
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/IMG_2529.jpg?v=1789253230" alt=""></div>
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/IMG_2530.heic?v=1789253230" alt=""></div>
-        <!-- set 2 (duplicate for seamless loop) -->
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/Wedding_ImG.jpg?v=1789157461" alt=""></div>
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/fpjspg8fs88fs.jpg?v=1789157460" alt=""></div>
         <div class="film-frame"><img src="https://cdn.shopify.com/s/files/1/0765/3710/2528/files/IMG_2529.jpg?v=1789253230" alt=""></div>
@@ -1149,7 +1120,6 @@
 </footer>
 
 <script>
-/* ============ i18n ============ */
 const translations = {
   hy: {},
   en: {
@@ -1286,15 +1256,12 @@ function openEnvelope(){
   if(envelopeOpened) return;
   envelopeOpened = true;
 
-  // Direct cinematic envelope opening — no hand/ribbon animation.
   envelope.classList.add('opening');
   document.body.style.overflow='hidden';
 
-  // Reveal the hero text elegantly, timed with the envelope opening.
   const heroContent = document.getElementById('hero-content');
   setTimeout(()=>{ heroContent.classList.add('in'); }, 3200);
 
-  // Let the slow 7.2s envelope opening finish before removing the intro.
   setTimeout(()=>{
     envelope.classList.add('hide');
     document.body.style.overflow='auto';
@@ -1304,7 +1271,7 @@ function openEnvelope(){
     bgMusic.volume = 0.55;
     bgMusic.play().then(()=>{
       musicToggle.classList.add('playing');
-    }).catch(()=>{ /* browser blocked autoplay — user can press the button */ });
+    }).catch(()=>{ });
   }
   musicToggle.classList.add('show');
 }
@@ -1341,7 +1308,6 @@ function goToSlide(i){
 setInterval(()=> goToSlide((slIndex+1) % slides.length), 4200);
 
 /* ============ TOGETHER COUNTER ============ */
-// EDIT ME: set the date the two of you got together
 const TOGETHER_SINCE = new Date('2019-06-15T00:00:00');
 
 const tgDigitsEl = document.getElementById('tg-digits');
@@ -1366,7 +1332,6 @@ function renderTgDigits(){
   setTgDigitsValue(daysTogether());
 }
 
-// Animates the digits counting up from 0 to the real value.
 let tgCountUpRunning = false;
 function animateTgCountUp(duration = 1600){
   const target = daysTogether();
@@ -1387,10 +1352,8 @@ function animateTgCountUp(duration = 1600){
   requestAnimationFrame(step);
 }
 
-// start at 0 — the count-up plays once the section scrolls into view
 setTgDigitsValue(0);
 
-// direction order per digit position: up, right, left, down (repeats for longer numbers)
 const TG_DIRECTIONS = [
   {dx:'0px',   dy:'-90px'},
   {dx:'90px',  dy:'0px'},
@@ -1422,7 +1385,6 @@ tgButton.addEventListener('click', ()=>{
   }, 3100);
 });
 
-// gentle glow-on + count-up-from-zero the first time the section is scrolled into view
 let tgHasCountedUp = false;
 const tgObserver = new IntersectionObserver((entries)=>{
   entries.forEach(entry=>{
