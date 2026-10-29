@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Արտավազդ &amp; Ստելլա | Հարսանիք 10.10.2026</title>
+<title>Արտավազդ &amp; Ստելլա | Հարսանիք 10.12.2026</title>
 <!--
   ═══════════════════════════════════════════════════════════════════
   ինչպես հարմարեցնել (HOW TO CUSTOMIZE) — կարդա՛ README.md ֆայլը
@@ -1196,7 +1196,7 @@
     <h2 class="section-title dark" data-i18n="rsvp_title">Հաստատեք Ձեր ներկայությունը</h2>
   </div>
   <div class="rsvp-card">
-    <p class="rsvp-deadline"><span data-i18n="rsvp_deadline_pre">Խնդրում ենք պատասխանել մինչև</span> <b>22.09.2026</b></p>
+    <p class="rsvp-deadline"><span data-i18n="rsvp_deadline_pre">Խնդրում ենք պատասխանել մինչև</span> <b>25.11.2026</b></p>
 
     <form id="rsvp-form">
       <div class="field-group">
@@ -1573,7 +1573,7 @@ document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
 /* ============ COUNTDOWN ============ */
 // EDIT ME: set your exact wedding date & time (YYYY-MM-DDTHH:MM:SS)
-const WEDDING_DATE = new Date('2026-10-10T11:00:00');
+const WEDDING_DATE = new Date('2026-12-10T11:00:00');
 function tickCountdown(){
   const now = new Date();
   let diff = WEDDING_DATE - now;
@@ -1673,7 +1673,7 @@ document.getElementById('rsvp-form').addEventListener('submit', async function(e
   e.preventDefault();
   const form = e.target;
   const data = new FormData(form);
-  data.append('access_key', 'cdcaaadc-c4eb-4cf9-9bc7-5ffa380e5da0$');
+  data.append('access_key', 'cdcaaadc-c4eb-4cf9-9bc7-5ffa380e5da0');
   const attending = data.get('attending');
 
   if(RSVP_ENDPOINT){
