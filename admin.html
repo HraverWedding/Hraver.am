@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ձեր Հյուրերը - Admin Dashboard</title>
+    <!-- SheetJS Excel-ի համար -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+        body { background: #f5f2eb; padding: 20px; color: #333; }
+        .container { max-width: 500px; margin: 0 auto; }
+        
+        h2 { text-align: center; margin-bottom: 15px; color: #4a4a4a; font-weight: 500; }
+        
+        /* Stats Cards */
+        .stats { display: flex; gap: 8px; margin-bottom: 20px; }
+        .card { flex: 1; background: #e8e5de; padding: 12px 8px; border-radius: 12px; text-align: center; border: 1px solid #dcd8cf; }
+        .card .number { font-size: 22px; font-weight: bold; margin-bottom: 4px; }
+        .card .label { font-size: 11px; color: #666; }
+        .card.yes .number { color: #2e7d32; }
+        .card.no .number { color: #c62828; }
+
+        /* Search & Filters */
+        .search-box { width: 100%; padding: 12px 16px; border-radius: 25px; border: 1px solid #dcd8cf; background: #eae7e0; outline: none; margin-bottom: 12px; font-size: 14px; }
+        
+        .filters { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 15px; }
+        .btn-filter { padding: 8px 16px; border-radius: 20px; border: 1px solid #dcd8cf; background: #fff; cursor: pointer; font-size: 13px; color: #555; }
+        .btn-filter.active { background: #111; color: #fff; border-color: #111; }
+        
+        .btn-excel { width: 100%; background: #1e5631; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 20px; font-size: 14px; }
+
+        .count-info { font-size: 13px; color: #666; margin-bottom: 10px; }
+
+        /* Guest List */
+        .guest-list { display: flex; flex-direction: column; gap: 10px; }
+        .guest-card { background: #faf8f5; border: 1px solid #e3decb; border-left: 4px solid #1e5631; border-radius: 12px; padding: 14px; display: flex; justify-content: space-between; align-items: center; }
+        .guest-card.declined { border-left-color: #c62828; }
+        
+        .guest-info h4 { font-size: 15px; margin-bottom: 4px; color: #222; }
+        .guest-info p { font-size: 12px; color: #777; margin-bottom: 2px; }
+        .guest-info .date { font-size: 10px; color: #aaa; }
+
+        .badge { padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; }
+        .badge.yes { background: #e8f5e9; color: #2e7d32; }
+        .badge.no { background: #ffebee; color: #c62828; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Ձեր Հյուրերը</h2>
+
+    <!-- Stats -->
+    <div class="stats">
+        <div class="card">
+            <div class="number" id="stat-total-responses">0</div>
+            <div class="label">Պատասխաններ</div>
+        </div>
+        <div class="card yes">
+            <div class="number" id="stat-total-guests">0</div>
+            <div class="label">✅ Գալու եմ</div>
+        </div>
+        <div class="card no">
+            <div class="number" id="stat-declined">0</div>
+            <div class="label">❌ Չեմ գալու</div>
+        </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <input type="text" id="search-input" class="search-box" placeholder="Որոնել անունով...">
+    
+    <div class="filters">
+        <button class="btn-filter active" onclick="filterGuests('all', this)">Բոլորը</button>
+        <button class="btn-filter" onclick="filterGuests('yes', this)">Գալու եմ</button>
+        <button class="btn-filter" onclick="filterGuests('no', this)">Չեմ գալու</button>
+        <button class="btn-filter" onclick="filterGuests('hars', this)">Հարսի հյուրերից</button>
+        <button class="btn-filter" onclick="filterGuests('pesa', this)">Փեսայի հյուրերից</button>
+    </div>
+
+    <button class="btn-excel" onclick="exportToExcel()">⬇ Ներբեռնել Excel</button>
+
+    <div class="count-info" id="visible-count">0 պատասխան</div>
+
+    <!-- List -->
+    <div class="guest-list" id="guest-container"></div>
+</div>
+
+<script>
+    // Թեստային տվյալներ (Հետագայում այստեղ կմիացնես Supabase/Web3Forms/Sheets API-ն)
+    let guests = [
+        { name: "Ալեն Սաքայան", attending: "yes", count: 1, side: "pesa", date: "05.09.2026 06:36" },
+        { name: "Արտավազդ և Ստելլա", attending: "yes", count: 5, side: "hars", date: "03.09.2026 20:47" },
+        { name: "Արմեն Գրիգորյան", attending: "no", count: 0, side: "hars", date: "01.09.2026 00:13" }
+    ];
+
+    let currentFilter = 'all';
+
+    function renderGuests() {
+        const container = document.getElementById('guest-container');
+        const search = document.getElementById('search-input').value.toLowerCase();
+        container.innerHTML = '';
+
+        let filtered = guests.filter(g => {
+            let matchesSearch = g.name.toLowerCase().includes(search);
+            let matchesFilter = true;
+            
+            if (currentFilter === 'yes') matchesFilter = g.attending === 'yes';
+            if (currentFilter === 'no') matchesFilter = g.attending === 'no';
+            if (currentFilter === 'hars') matchesFilter = g.side === 'hars';
+            if (currentFilter === 'pesa') matchesFilter = g.side === 'pesa';
+
+            return matchesSearch && matchesFilter;
+        });
+
+        // Update Stats
+        let totalResponses = guests.length;
+        let totalGuests = guests.reduce((sum, g) => sum + (g.attending === 'yes' ? Number(g.count) : 0), 0);
+        let declinedCount = guests.filter(g => g.attending === 'no').length;
+
+        document.getElementById('stat-total-responses').innerText = totalResponses;
+        document.getElementById('stat-total-guests').innerText = totalGuests;
+        document.getElementById('stat-declined').innerText = declinedCount;
+        document.getElementById('visible-count').innerText = `${filtered.length} պատասխան`;
+
+        // Render List
+        filtered.forEach(g => {
+            const isYes = g.attending === 'yes';
+            const card = document.createElement('div');
+            card.className = `guest-card ${isYes ? '' : 'declined'}`;
+            card.innerHTML = `
+                <div class="guest-info">
+                    <h4>${g.name}</h4>
+                    <p>Հյուրեր: ${g.count} • ${g.side === 'hars' ? 'Հարսի' : 'Փեսայի'} հյուրերից</p>
+                    <div class="date">${g.date}</div>
+                </div>
+                <div class="badge ${isYes ? 'yes' : 'no'}">
+                    ${isYes ? '✅ Գալու եմ' : '❌ Չեմ գալու'}
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    }
+
+    function filterGuests(filter, btn) {
+        currentFilter = filter;
+        document.querySelectorAll('.btn-filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderGuests();
+    }
+
+    document.getElementById('search-input').addEventListener('input', renderGuests);
+
+    function exportToExcel() {
+        const ws = XLSX.utils.json_to_sheet(guests);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, "Guests");
+        XLSX.saveAs(wb, "Guests_List.xlsx");
+    }
+
+    // Initial render
+    renderGuests();
+</script>
+
+</body>
+</html>
