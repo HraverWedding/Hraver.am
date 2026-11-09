@@ -1603,7 +1603,7 @@ setInterval(tickCountdown, 1000);
 const guestsGroup = document.getElementById('guests-group');
 const guestsInput = guestsGroup.querySelector('input[name="guests"]');
 const attendingRadios = document.querySelectorAll('input[name="attending"]');
-const sideChecks = document.querySelectorAll('input[name="side"]');
+const sideRadios = document.querySelectorAll('input[name="side"]');
 const nameInput = document.querySelector('input[name="name"]');
 const submitBtn = document.getElementById('submit-btn');
 const rsvpHint = document.getElementById('rsvp-hint');
@@ -1620,14 +1620,14 @@ attendingRadios.forEach(radio=>{
     validateRsvpForm();
   });
 });
-sideChecks.forEach(chk=> chk.addEventListener('change', validateRsvpForm));
+sideRadios.forEach(radio => radio.addEventListener('change', validateRsvpForm));
 nameInput.addEventListener('input', validateRsvpForm);
 guestsInput.addEventListener('input', validateRsvpForm);
 
 function validateRsvpForm(){
   const attendingValue = (Array.from(attendingRadios).find(r=>r.checked) || {}).value;
   const attendingAnswered = !!attendingValue;
-  const sideAnswered = Array.from(sideChecks).some(c=>c.checked);
+  const sideAnswered = Array.from(sideRadios).some(r => r.checked);
   const nameAnswered = nameInput.value.trim().length > 0;
 
   // Progress: 3 questions by default, becomes 4 once "yes" is selected
