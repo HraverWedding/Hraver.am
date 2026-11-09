@@ -1589,7 +1589,6 @@ function tickCountdown(){
 }
 tickCountdown();
 setInterval(tickCountdown, 1000);
-
 /* ============ RSVP: show/hide guest count based on attendance ============ */
 const guestsGroup = document.getElementById('guests-group');
 const guestsInput = guestsGroup.querySelector('input[name="guests"]');
@@ -1641,9 +1640,10 @@ function validateRsvpForm(){
 validateRsvpForm();
 
 /* ============ RSVP FORM ============ */
-// EDIT ME: replace YOUR_FORM_ID with a Formspree (or similar) endpoint to receive real submissions.
-// See README.md for step-by-step instructions.
-const RSVP_ENDPOINT = "https://api.web3forms.com/submit"; // e.g. "https://formspree.io/f/YOUR_FORM_ID"
+const RSVP_ENDPOINT = "https://api.web3forms.com/submit"; 
+
+// 👉 ԱՅՍՏԵՂ ՏԵՂԱԴՐԻՐ ՔՈ GOOGLE APPS SCRIPT-Ի URL-Ը (չակերտների մեջ)
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbTAaGWXEAmh6e00rdp0DKNI--uviPNPmlE1uTQCA6XQlHNg6tYEVdwd1WlTzWtYt4/exec";
 
 function fireConfetti(){
   const wrap = document.getElementById('confetti-burst');
@@ -1676,12 +1676,29 @@ document.getElementById('rsvp-form').addEventListener('submit', async function(e
   data.append('access_key', 'cdcaaadc-c4eb-4cf9-9bc7-5ffa380e5da0');
   const attending = data.get('attending');
 
+  // 1. Ուղարկում ենք Google Sheets (որ գրանցվի ադմին էջի համար)
+  try {
+    const payload = {
+        name: data.get('name') || '',
+        attending: attending || 'yes',
+        count: data.get('guests') || 1,
+        side: data.get('side') || 'pesa',
+        date: new Date().toLocaleString()
+    };
+
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    });
+  } catch(err) { console.error('Sheets error:', err); }
+
+  // 2. Ուղարկում ենք Web3Forms (եթե օգտագործում ես նաև փոստով ստանալու համար)
   if(RSVP_ENDPOINT){
     try{
       await fetch(RSVP_ENDPOINT, { method:'POST', body:data, headers:{'Accept':'application/json'} });
     }catch(err){ console.error(err); }
-  } else {
-    console.log('RSVP (demo mode, no endpoint set):', Object.fromEntries(data.entries()));
   }
 
   form.style.display = 'none';
@@ -1694,6 +1711,5 @@ document.getElementById('rsvp-form').addEventListener('submit', async function(e
   }
 });
 </script>
-
 </body>
 </html>
