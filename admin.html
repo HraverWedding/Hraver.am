@@ -87,14 +87,22 @@
 </div>
 
 <script>
-    // Թեստային տվյալներ (Հետագայում այստեղ կմիացնես Supabase/Web3Forms/Sheets API-ն)
-    let guests = [
-        { name: "Ալեն Սաքայան", attending: "yes", count: 1, side: "pesa", date: "05.09.2026 06:36" },
-        { name: "Արտավազդ և Ստելլա", attending: "yes", count: 5, side: "hars", date: "03.09.2026 20:47" },
-        { name: "Արմեն Գրիգորյան", attending: "no", count: 0, side: "hars", date: "01.09.2026 00:13" }
-    ];
+    // Այստեղ տեղադրիր քո Google Apps Script-ի URL-ը (չակերտների մեջ)
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwbTAaGWXEAmh6e00rdp0DKNI--uviPNPmlE1uTQCA6XQlHNg6tYEVdwd1WlTzWtYt4/exec";
 
+    let guests = [];
     let currentFilter = 'all';
+
+    // Google Sheets-ից տվյալները բեռնելու ֆունկցիա
+    async function fetchGuests() {
+        try {
+            const res = await fetch(SCRIPT_URL);
+            guests = await res.json();
+            renderGuests();
+        } catch (err) {
+            console.error("Տվյալները բեռնելիս սխալ տեղի ունեցավ:", err);
+        }
+    }
 
     function renderGuests() {
         const container = document.getElementById('guest-container');
@@ -102,7 +110,7 @@
         container.innerHTML = '';
 
         let filtered = guests.filter(g => {
-            let matchesSearch = g.name.toLowerCase().includes(search);
+            let matchesSearch = (g.name || '').toLowerCase().includes(search);
             let matchesFilter = true;
             
             if (currentFilter === 'yes') matchesFilter = g.attending === 'yes';
@@ -115,7 +123,7 @@
 
         // Update Stats
         let totalResponses = guests.length;
-        let totalGuests = guests.reduce((sum, g) => sum + (g.attending === 'yes' ? Number(g.count) : 0), 0);
+        let totalGuests = guests.reduce((sum, g) => sum + (g.attending === 'yes' ? Number(g.count || 1) : 0), 0);
         let declinedCount = guests.filter(g => g.attending === 'no').length;
 
         document.getElementById('stat-total-responses').innerText = totalResponses;
@@ -152,24 +160,31 @@
     document.getElementById('search-input').addEventListener('input', renderGuests);
 
     function exportToExcel() {
-    let csvContent = "data:text/csv;charset=utf-8,Anun,Karcavitch,Qanak,Koxm,Tarberak\n";
+        if (guests.length === 0) {
+            alert("Ցուցակը դատարկ է:");
+            return;
+        }
+        let csvContent = "data:text/csv;charset=utf-8,\uFEFFAnun,Kargavichak,Qanak,Koghm,AmSativ\n";
+        
+        guests.forEach(g => {
+            let row = [`"${g.name}"`, `"${g.attending}"`, `"${g.count}"`, `"${g.side}"`, `"${g.date}"`];
+            csvContent += row.join(",") + "\n";
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "Hyureri_Cucak.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    // Առաջին բեռնման ժամանակ կանչել տվյալները
+    fetchGuests();
     
-    guests.forEach(g => {
-        let row = [g.name, g.attending, g.count, g.side, g.date];
-        csvContent += row.join(",") + "\n";
-    });
-
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "Hajureri_Ցուցակ.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-    // Initial render
-    renderGuests();
+    // Ավտոմատ թարմացնել յուրաքանչյուր 10 վայրկյանը մեկ
+    setInterval(fetchGuests, 10000);
 </script>
 
 </body>
