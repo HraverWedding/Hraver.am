@@ -1616,7 +1616,7 @@ attendingRadios.forEach(radio=>{
     validateRsvpForm();
   });
 });
-sideRadios.forEach(radio => radio.addEventListener('change', validateRsvpForm));
+sideRadios.forEach(radio => {  radio.addEventListener('change', validateRsvpForm);});
 nameInput.addEventListener('input', validateRsvpForm);
 guestsInput.addEventListener('input', validateRsvpForm);
 
