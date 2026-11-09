@@ -136,6 +136,10 @@
         const search = document.getElementById('search-input').value.toLowerCase();
         container.innerHTML = '';
 
+        if (!Array.isArray(guests)) {
+            guests = [];
+        }
+
         let filtered = guests.filter(g => {
             let guestName = (g.name || g.Name || '').toString();
             let matchesSearch = guestName.toLowerCase().includes(search);
@@ -146,8 +150,14 @@
 
             if (currentFilter === 'yes') matchesFilter = attendingStatus === 'yes';
             if (currentFilter === 'no') matchesFilter = attendingStatus === 'no';
-            if (currentFilter === 'hars') matchesFilter = guestSide.includes('hars');
-            if (currentFilter === 'pesa') matchesFilter = guestSide.includes('pesa');
+            
+            // Այստեղ հավասարեցրեցինք, որ հասկանա թե անգլերեն (hars/bride), թե հայերեն (հարս) գրառումները
+            if (currentFilter === 'hars') {
+                matchesFilter = guestSide.includes('hars') || guestSide.includes('hupմ') || guestSide.includes('հարս') || guestSide.includes('bride');
+            }
+            if (currentFilter === 'pesa') {
+                matchesFilter = guestSide.includes('pesa') || guestSide.includes('փեսա') || guestSide.includes('groom');
+            }
 
             return matchesSearch && matchesFilter;
         });
@@ -172,10 +182,18 @@
             const isYes = (g.attending || '').toString().toLowerCase() === 'yes';
             const card = document.createElement('div');
             card.className = `guest-card ${isYes ? '' : 'declined'}`;
+            
+            // Ստուգում ենք կողմի անվանումը քարտի վրա գեղեցիկ գրելու համար
+            let rawSide = (g.side || '').toString().toLowerCase();
+            let sideText = 'Փեսայի';
+            if (rawSide.includes('hars') || rawSide.includes('հարս') || rawSide.includes('bride')) {
+                sideText = 'Հարսի';
+            }
+
             card.innerHTML = `
                 <div class="guest-info">
                     <h4>${g.name || 'Անհայտ'}</h4>
-                    <p>Հյուրեր: ${g.count || 1} • ${(g.side || '').toString().toLowerCase().includes('hars') ? 'Հարսի' : 'Փեսայի'} հյուրերից</p>
+                    <p>Հյուրեր: ${g.count || 1} • ${sideText} հյուրերից</p>
                     <div class="date">${g.date || ''}</div>
                 </div>
                 <div class="badge ${isYes ? 'yes' : 'no'}">
